@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">android_demo_application</string>
+    <string name="shouye">首页</string>
+    <string name="wenda">问答</string>
+    <string name="tixi">体系</string>
+    <string name="wode">我的</string>
 </resources>
