@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,35 +8,15 @@
     tools:context=".activities.MainActivity">
 
 <androidx.viewpager.widget.ViewPager
+    android:id="@+id/pager"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+</androidx.viewpager.widget.ViewPager>
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabMode="fixed"
-        android:layout_gravity="bottom"
-        android:background="#B0C4DE">
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/shouye"
-            android:icon="@drawable/shouye"/>
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wenda"
-            android:icon="@drawable/wenda"/>
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tixi"
-            android:icon="@drawable/tixi"/>
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wode"
-            android:icon="@drawable/wode"/>
-    </com.google.android.material.tabs.TabLayout>
-</androidx.viewpager.widget.ViewPager>
+        android:layout_alignParentBottom="true"/>
 
-</FrameLayout>
+
+</RelativeLayout>
