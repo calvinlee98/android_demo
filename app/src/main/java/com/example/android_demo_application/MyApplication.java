@@ -6,6 +6,7 @@ import android.util.Log;
 
 import org.litepal.LitePalApplication;
 
+
 public class MyApplication extends Application {
     private static Context context;
     private static String TAG = ".MyApplication";
@@ -17,7 +18,7 @@ public class MyApplication extends Application {
         context = getApplicationContext();
         LitePalApplication.initialize(context);
     }
-    public Context getContext(){
+    public static Context getContext(){
         return context;//全局获取context   application级context
     }
 }
