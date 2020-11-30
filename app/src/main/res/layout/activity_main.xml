@@ -10,7 +10,7 @@
     <fragment
         android:id="@+id/shouyeFragment"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="653dp"
         android:name="com.example.android_demo_application.fragments.ShouyeFragment" />
 
     <androidx.viewpager.widget.ViewPager

@@ -57,8 +57,9 @@
 
     <Button
         android:id="@+id/likeBtn"
-        android:layout_width="25dp"
+        android:layout_width="30dp"
         android:layout_height="30dp"
+        android:background="@drawable/like"
         app:layout_constraintEnd_toEndOf="@id/contentText"
         app:layout_constraintTop_toBottomOf="@id/contentText"/>
 
