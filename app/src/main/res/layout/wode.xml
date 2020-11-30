@@ -9,20 +9,58 @@
        android:layout_weight="1"
        android:background="#1E90FF">
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@drawable/kid"
         android:layout_centerInParent="true"
         android:id="@+id/touxiang"/>
-      <TextView
+      <Button
+          android:id="@+id/qudenglu"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:background="@android:color/transparent"
           android:text="@string/qudenglu"
           android:textColor="@color/white"
-          android:layout_below="@+id/touxiang"/>
+          android:layout_below="@+id/touxiang"
+          android:layout_centerHorizontal="true"/>
    </RelativeLayout>
-   <androidx.recyclerview.widget.RecyclerView
-       android:id="@+id/list_item"
+   <LinearLayout
        android:layout_width="match_parent"
-       android:layout_height="wrap_content"/>
+       android:layout_height="0dp"
+       android:layout_weight="2"
+       android:orientation="vertical"
+       android:layout_marginTop="2dp">
+      <com.example.android_demo_application.views.MyButton
+          android:id="@+id/wodejifen"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+      <com.example.android_demo_application.views.MyButton
+          android:id="@+id/wodefenxiang"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+       <com.example.android_demo_application.views.MyButton
+           android:id="@+id/wodeshoucang"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
+       <com.example.android_demo_application.views.MyButton
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/shaohouyuedu"/>
+       <com.example.android_demo_application.views.MyButton
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/yuedulishi"/>
+       <com.example.android_demo_application.views.MyButton
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/kaiyuanxiangmu"/>
+       <com.example.android_demo_application.views.MyButton
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/guanyuzuozhe"/>
+       <com.example.android_demo_application.views.MyButton
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/xitongshezhi"/>
+   </LinearLayout>
 </LinearLayout>
