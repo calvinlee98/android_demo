@@ -14,10 +14,11 @@
         android:src="@drawable/kid"
         android:layout_centerInParent="true"
         android:id="@+id/touxiang"/>
-      <TextView
+      <Button
           android:id="@+id/qudenglu"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:background="@android:color/transparent"
           android:text="@string/qudenglu"
           android:textColor="@color/white"
           android:layout_below="@+id/touxiang"
@@ -29,192 +30,37 @@
        android:layout_weight="2"
        android:orientation="vertical"
        android:layout_marginTop="2dp">
-       <RelativeLayout
-           android:layout_width="wrap_content"
-           android:layout_height="0dp"
-           android:layout_weight="1">
-           <ImageView
-               android:id="@+id/image1"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_centerHorizontal="true"
-               android:src="@drawable/wodejifen"
-               android:layout_alignParentLeft="true"/>
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/wodejifen"
-               android:layout_centerHorizontal="true"
-               android:layout_toRightOf="@id/image1"
-               android:layout_marginLeft="5dp"/>
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/right"
-               android:layout_centerHorizontal="true"
-               android:layout_alignParentRight="true"/>
-       </RelativeLayout>
-       <RelativeLayout
+      <com.example.android_demo_application.views.MyButton
+          android:id="@+id/wodejifen"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+      <com.example.android_demo_application.views.MyButton
+          android:id="@+id/wodefenxiang"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+       <com.example.android_demo_application.views.MyButton
+           android:id="@+id/wodeshoucang"
            android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:layout_weight="1">
-           <ImageView
-               android:id="@+id/image2"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/wodefenxiang"
-               android:layout_alignParentLeft="true"/>
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/wodefenxiang"
-               android:layout_centerHorizontal="true"
-               android:layout_toRightOf="@+id/image2"
-               android:layout_marginLeft="5dp" />
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/right"
-               android:layout_alignParentRight="true"/>
-       </RelativeLayout>
-       <RelativeLayout
+           android:layout_height="wrap_content"/>
+       <com.example.android_demo_application.views.MyButton
            android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:layout_weight="1">
-           <ImageView
-               android:id="@+id/image3"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/wodeshoucang"
-               android:layout_alignParentLeft="true"/>
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/wodeshoucang"
-               android:layout_centerHorizontal="true"
-               android:layout_toRightOf="@+id/image3"
-               android:layout_marginLeft="5dp"/>
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/right"
-               android:layout_alignParentRight="true"/>
-       </RelativeLayout>
-       <RelativeLayout
+           android:layout_height="wrap_content"
+           android:id="@+id/shaohouyuedu"/>
+       <com.example.android_demo_application.views.MyButton
            android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:layout_weight="1">
-           <ImageView
-               android:id="@+id/image4"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/shaohouyuedu"
-               android:layout_alignParentLeft="true"/>
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/shaohouyuedu"
-               android:layout_centerHorizontal="true"
-               android:layout_toRightOf="@id/image4"
-               android:layout_marginLeft="5dp"/>
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/right"
-               android:layout_alignParentRight="true"/>
-       </RelativeLayout>
-       <RelativeLayout
+           android:layout_height="wrap_content"
+           android:id="@+id/yuedulishi"/>
+       <com.example.android_demo_application.views.MyButton
            android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:layout_weight="1">
-           <ImageView
-               android:id="@+id/image5"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/yuedulishi"
-               android:layout_alignParentLeft="true"/>
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/yuedulishi"
-               android:layout_centerHorizontal="true"
-               android:layout_toRightOf="@+id/image5"
-               android:layout_marginLeft="5dp"/>
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/right"
-               android:layout_alignParentRight="true"/>
-       </RelativeLayout>
-       <RelativeLayout
+           android:layout_height="wrap_content"
+           android:id="@+id/kaiyuanxiangmu"/>
+       <com.example.android_demo_application.views.MyButton
            android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:layout_weight="1">
-           <ImageView
-               android:id="@+id/image6"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/kaiyuanxiangmu"
-               android:layout_alignParentLeft="true"/>
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/kaiyuanxiangmu"
-               android:layout_centerHorizontal="true"
-               android:layout_toRightOf="@id/image6"
-               android:layout_marginLeft="5dp"/>
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/right"
-               android:layout_alignParentRight="true"/>
-       </RelativeLayout>
-       <RelativeLayout
+           android:layout_height="wrap_content"
+           android:id="@+id/guanyuzuozhe"/>
+       <com.example.android_demo_application.views.MyButton
            android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:layout_weight="1">
-           <ImageView
-               android:id="@+id/image7"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/guanyuzuozhe"
-               android:layout_alignParentLeft="true"/>
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/guanyuzuozhe"
-               android:layout_centerHorizontal="true"
-               android:layout_toRightOf="@id/image7"
-               android:layout_marginLeft="5dp"/>
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/right"
-               android:layout_alignParentRight="true"/>
-       </RelativeLayout>
-       <RelativeLayout
-           android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:layout_weight="1">
-           <ImageView
-               android:id="@+id/image8"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/xitongshezhi"
-               android:layout_alignParentLeft="true"/>
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/xitongshezhi"
-               android:layout_centerHorizontal="true"
-               android:layout_toRightOf="@+id/image8"
-               android:layout_marginLeft="5dp"/>
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/right"
-               android:layout_alignParentRight="true"/>
-       </RelativeLayout>
-
+           android:layout_height="wrap_content"
+           android:id="@+id/xitongshezhi"/>
    </LinearLayout>
 </LinearLayout>

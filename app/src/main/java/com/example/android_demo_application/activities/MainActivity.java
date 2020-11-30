@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        initTab();
     }
     private void initView(){
         //  view的初始化
@@ -47,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
 
         tabLayout.setupWithViewPager(pager);
+
+        initTab();
 
     }
     private void initTab(){
