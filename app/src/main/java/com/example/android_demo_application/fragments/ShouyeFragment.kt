@@ -132,7 +132,7 @@ class ShouyeFragment : Fragment() {
     private fun setRecyclerView(itemList: List<ShouyeItem>) {
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
-        val adapter = ShouyeAdapter(childFragmentManager, itemList)
+        val adapter = ShouyeAdapter(childFragmentManager, itemList, listOf(ShouyeBannerFragment()))
         recyclerView.adapter = adapter
     }
 
