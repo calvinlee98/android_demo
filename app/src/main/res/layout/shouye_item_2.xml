@@ -30,13 +30,15 @@
 
     <TextView
         android:id="@+id/titleText"
-        android:layout_width="370dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:ellipsize="end"
         tools:text="test"
         android:textSize="28sp"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_below="@+id/authorText"
         android:layout_centerHorizontal="true"/>
 
