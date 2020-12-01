@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,10 +32,13 @@ class ShouyeFragment : Fragment() {
     private var nextPage = 1
 
     private lateinit var fragmentView: View
-    private lateinit var progressDialog: ProgressDialog
+    private val progressDialog by lazy {
+        ProgressDialog(activity)
+    }
     private val recyclerView by lazy {
         fragmentView.shouyeRecyclerView
     }
+
     private val _itemList = ArrayList<ShouyeItem>()
 
     private val handler = object : Handler(Looper.getMainLooper()) {
@@ -74,8 +78,6 @@ class ShouyeFragment : Fragment() {
     }
 
     private fun init() {
-        progressDialog = ProgressDialog(activity)
-
         fragmentView.titleBar.refreshBtn.setOnClickListener {
             refresh()
         }
@@ -147,7 +149,7 @@ class ShouyeFragment : Fragment() {
         }
 
         // wait for 5s and send fail
-        thread {
+        MyApplication.getPools().execute {
             Thread.sleep(5000)
             if (progressDialog.isShowing) {
                 val msg = Message()
