@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.android_demo_application.R;
 import com.example.android_demo_application.fragment_adapters.MainActivityAdapter;
+import com.example.android_demo_application.fragments.ShouyeFragment;
 import com.example.android_demo_application.fragments.WodeFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -34,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
 
         //创建一个fragments list
         List<Fragment>list = new ArrayList<>();
-        list.add(new WodeFragment());
-        list.add(new WodeFragment());
-        list.add(new WodeFragment());
-        list.add(new WodeFragment());
+        list.add(new ShouyeFragment());
+        list.add(new ShouyeFragment());
+        list.add(new ShouyeFragment());
+        list.add(new ShouyeFragment());
 
         //主页  viewpager 的 adapter
         MainActivityAdapter adapter = new MainActivityAdapter(getSupportFragmentManager(),list);
