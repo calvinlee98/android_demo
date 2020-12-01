@@ -18,10 +18,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.LogActivity"/>
-        <service android:name=".services.ILogAndRegisterService"
-            android:enabled="true"
-            android:exported="true"
-            android:process=":remote"/>
     </application>
 
 </manifest>

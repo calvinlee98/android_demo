@@ -30,11 +30,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
-import com.example.android_demo_application.ILogAndRegisterInterface;
+
 import com.example.android_demo_application.MyApplication;
 import com.example.android_demo_application.R;
-import com.example.android_demo_application.activities.LogActivity;
-import com.example.android_demo_application.services.ILogAndRegisterService;
+
+import com.example.android_demo_application.utils.HttpUtils;
 import com.example.android_demo_application.views.MyButton;
 
 
@@ -101,24 +101,14 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
      xitongshezhi.setOnClickListener(this::onClick);
 
     }
-    ILogAndRegisterInterface iLogAndRegisterInterface = null;
-    ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            iLogAndRegisterInterface = ILogAndRegisterInterface.Stub.asInterface(service);
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(getActivity(),ILogAndRegisterService.class);
-        getActivity().bindService(intent,connection,Context.BIND_AUTO_CREATE);
     }
+
+
+
     Handler handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -134,15 +124,11 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            String s = iLogAndRegisterInterface.login("lifangzheng","12345");
+                            String s = HttpUtils.login("lifangzheng","12345");
                             Message message = Message.obtain();
                             message.setTarget(handler);
                             message.obj  = s;
                             handler.sendMessage(message);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
                     }
                 };
                 MyApplication.getPools().execute(runnable);
