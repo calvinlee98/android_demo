@@ -1,6 +1,8 @@
 package com.example.android_demo_application.utils;
 
 import com.example.android_demo_application.utities.ShouyeItem;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,17 +73,22 @@ public class HttpUtils {
        try {
            response = client.newCall(request).execute();
            responseData = response.body().string();
+
            JSONObject jsonObject = new JSONObject(responseData);
-           jsonObject = jsonObject.getJSONObject("data");
-           JSONArray jsonArray =  jsonObject.getJSONArray("datas");
+           JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+           JSONArray jsonArray = jsonObject1.getJSONArray("datas");
+
+
+
            List<ShouyeItem>list = new ArrayList<>();
            for(int i=0;i<jsonArray.length();++i){
-               JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-               list.add(new ShouyeItem(jsonObject1.getString("author"),jsonObject1.getString("publishTime"),
-                       jsonObject1.getString("title"),"",jsonObject1.getString("superChapterName"),
-                       jsonObject1.getString("link")));
+               JSONObject object = jsonArray.getJSONObject(i);
+               list.add(new ShouyeItem(object.getString("author"),object.getString("publishTime"),
+                       object.getString("title"),"",object.getString("superChapterName"),
+                       object.getString("link")));
            }
-           return list;
+          return list;
+
 
        } catch (Exception e) {
            return new ArrayList<>();

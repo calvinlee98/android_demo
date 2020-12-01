@@ -1,5 +1,7 @@
 package com.example.android_demo_application
 
+import com.example.android_demo_application.utils.HttpUtils
+import com.example.android_demo_application.utities.ShouyeItem
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -13,5 +15,14 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
+    }
+    @Test
+    fun testGetArticleList(){
+        var list:List<ShouyeItem> = HttpUtils.getLists(0);
+        assertEquals(list.size,10);
+    }
+    @Test
+    fun testLogin(){
+        assertEquals(HttpUtils.login("lifangzheng","12345"),"");
     }
 }
