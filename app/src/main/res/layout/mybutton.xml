@@ -2,18 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E6E6FA"/>
     <ImageButton
         android:id="@+id/ib"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@id/line"
         android:layout_alignParentLeft="true"/>
     <Button
         android:id="@+id/b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@id/line"
         android:textColor="@color/black"
         android:layout_toRightOf="@+id/ib"
         android:layout_marginLeft="3dp"
@@ -23,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/line"
         android:background="@android:color/transparent"
         android:src="@drawable/right"/>
 
