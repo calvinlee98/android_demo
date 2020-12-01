@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragments.ShouyeBannerFragment
+import com.example.android_demo_application.utities.ShouyeItem
 import kotlinx.android.synthetic.main.shouye_item_1.view.*
 import kotlinx.android.synthetic.main.shouye_item_2.view.*
 
@@ -59,5 +60,3 @@ class ShouyeBannerAdapter(fragmentManager: FragmentManager, private val bannerFr
     }
     override fun getCount() = bannerFragmentList.size
 }
-
-class ShouyeItem(val author: String?, val publishTime: String?, val title: String?, val content: String?, val superChapterName: String?, val link: String?)
