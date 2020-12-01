@@ -1,10 +1,13 @@
 package com.example.android_demo_application.fragments
 
+import android.app.Activity
+import android.app.Application
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +15,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.ShouyeAdapter
+import com.example.android_demo_application.utils.HttpUtils
 import com.example.android_demo_application.utities.ShouyeItem
 import kotlinx.android.synthetic.main.shouye.view.*
 import kotlinx.android.synthetic.main.title_bar.view.*
@@ -33,7 +38,9 @@ class ShouyeFragment : Fragment() {
                 loadingSuccess -> {
                     if (progressDialog.isShowing) {
                         progressDialog.dismiss()
-                        setRecyclerView()
+                        val itemList = msg.obj as List<ShouyeItem>
+                        Toast.makeText(activity, "${itemList.size}", Toast.LENGTH_SHORT).show()
+                        setRecyclerView(itemList)
                     }
                 }
                 loadingFail -> {
@@ -89,29 +96,29 @@ class ShouyeFragment : Fragment() {
             handler.sendMessage(msg)
         }
 
-        thread {
-            getWebResources()
+        // get first page and set recyclerView
+        val pool = MyApplication.getPools()
+        pool.execute {
+            val itemList = HttpUtils.getLists(0)
+            Log.d("web", "${itemList.size}")
+            val msg = Message()
+            if (itemList.isNotEmpty()) {
+                msg.what = loadingSuccess
+                msg.obj = itemList
+            } else {
+                msg.what = loadingFail
+            }
+            handler.sendMessage(msg)
         }
 
     }
 
-    private fun getWebResources() {
-        // TODO: get web resources and change it to loading success!
-        val msg = Message()
-        msg.what = loadingSuccess
-        handler.sendMessage(msg)
-    }
-
-    private fun setRecyclerView() {
+    private fun setRecyclerView(itemList: List<ShouyeItem>) {
         val recyclerView = fragmentView.shouyeRecyclerView
 
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
-        val adapter = ShouyeAdapter(childFragmentManager, getArticles())
+        val adapter = ShouyeAdapter(childFragmentManager, itemList)
         recyclerView.adapter = adapter
-    }
-
-    private fun getArticles() : List<ShouyeItem> {
-        return listOf(ShouyeItem("k1t", "2020/11/30", "Test", "Test", "Test", "Test"))
     }
 }
