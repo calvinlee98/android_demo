@@ -99,6 +99,9 @@ class ShouyeFragment : Fragment() {
         // get first page and set recyclerView
         val pool = MyApplication.getPools()
         pool.execute {
+            _itemList.clear()
+            nextPage = 1
+
             val itemList = HttpUtils.getLists(0)
             val msg = Message()
             if (itemList.isNotEmpty()) {
