@@ -7,6 +7,7 @@ package com.example.android_demo_application.fragments;
 * */
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.android_demo_application.MyApplication;
 import com.example.android_demo_application.R;
+import com.example.android_demo_application.activities.LogActivity;
 import com.example.android_demo_application.views.MyButton;
 
 
@@ -59,15 +61,18 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
         xitongshezhi = view.findViewById(R.id.xitongshezhi);
 
 
+
+
+
         //设置每个复合button的图片 文字资源
-        wodejifen.set(R.drawable.wodejifen,R.string.wodefenxiang,this::onClick);
-        wodefenxiang.set(R.drawable.wodefenxiang,R.string.wodefenxiang,this::onClick);
-        wodeshoucang.set(R.drawable.wodeshoucang,R.string.wodeshoucang,this::onClick);
-        shaohouyuedu.set(R.drawable.shaohouyuedu,R.string.shaohouyuedu,this::onClick);
-        yuedulishi.set(R.drawable.yuedulishi,R.string.yuedulishi,this::onClick);
-        kaiyuanxiangmu.set(R.drawable.kaiyuanxiangmu,R.string.kaiyuanxiangmu,this::onClick);
-        guanyuzuozhe.set(R.drawable.guanyuzuozhe,R.string.guanyuzuozhe,this::onClick);
-        xitongshezhi.set(R.drawable.xitongshezhi,R.string.xitongshezhi,this::onClick);
+        wodejifen.set(R.drawable.wodejifen,R.string.wodejifen);
+        wodefenxiang.set(R.drawable.wodefenxiang,R.string.wodefenxiang);
+        wodeshoucang.set(R.drawable.wodeshoucang,R.string.wodeshoucang);
+        shaohouyuedu.set(R.drawable.shaohouyuedu,R.string.shaohouyuedu);
+        yuedulishi.set(R.drawable.yuedulishi,R.string.yuedulishi);
+        kaiyuanxiangmu.set(R.drawable.kaiyuanxiangmu,R.string.kaiyuanxiangmu);
+        guanyuzuozhe.set(R.drawable.guanyuzuozhe,R.string.guanyuzuozhe);
+        xitongshezhi.set(R.drawable.xitongshezhi,R.string.xitongshezhi);
 
 
 
@@ -76,12 +81,15 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
 
 
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MyApplication.getContext(),"去登陆",Toast.LENGTH_SHORT).show();
-            }
-        });
+     button.setOnClickListener(this::onClick);
+     wodejifen.setOnClickListener(this::onClick);
+     wodefenxiang.setOnClickListener(this::onClick);
+     wodeshoucang.setOnClickListener(this::onClick);
+     shaohouyuedu.setOnClickListener(this::onClick);
+     yuedulishi.setOnClickListener(this::onClick);
+     kaiyuanxiangmu.setOnClickListener(this::onClick);
+     guanyuzuozhe.setOnClickListener(this::onClick);
+     xitongshezhi.setOnClickListener(this::onClick);
 
     }
 
@@ -89,7 +97,8 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.qudenglu:
-                Toast.makeText(MyApplication.getContext(),"去登陆",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), LogActivity.class);
+                startActivity(intent);
                 break;
             case R.id.wodejifen:
                 Toast.makeText(MyApplication.getContext(),"我的积分",Toast.LENGTH_SHORT).show();

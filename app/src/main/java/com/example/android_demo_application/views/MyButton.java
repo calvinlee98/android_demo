@@ -3,6 +3,7 @@ package com.example.android_demo_application.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -28,11 +29,14 @@ public class MyButton extends FrameLayout {
          button = findViewById(R.id.b);
         imageButton2 = findViewById(R.id.ib2);
     }
-    public void set(int imageSrc, int stringSrc, View.OnClickListener listener){
+    public void set(int imageSrc, int stringSrc){
        imageButton1.setBackgroundResource(imageSrc);
        button.setText(stringSrc);
-       imageButton1.setOnClickListener(listener);
-       button.setOnClickListener(listener);
-       imageButton2.setOnClickListener(listener);
+
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return true;
     }
 }

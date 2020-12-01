@@ -6,6 +6,7 @@
         android:id="@+id/ib"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentLeft="true"/>
     <Button
         android:id="@+id/b"
@@ -15,12 +16,14 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/black"
         android:layout_toRightOf="@+id/ib"
-        android:layout_marginLeft="3dp"/>
+        android:layout_marginLeft="3dp"
+        />
     <ImageButton
         android:id="@+id/ib2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
         android:src="@drawable/right"/>
 
