@@ -140,8 +140,10 @@ class ShouyeFragment : Fragment() {
     }
 
     private fun notifyRecyclerView(position: Int) {
-        recyclerView.adapter?.notifyItemInserted(position)
-        recyclerView.scrollToPosition(position)
+        // position + 1 because of the banner
+        recyclerView.adapter?.notifyItemInserted(position+1)
+        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+        layoutManager.scrollToPositionWithOffset(position+1, 0)
     }
 
     private fun showProgressDialog() {
