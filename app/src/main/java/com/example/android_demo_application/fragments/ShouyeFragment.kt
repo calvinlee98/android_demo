@@ -5,16 +5,20 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.ShouyeAdapter
+import com.example.android_demo_application.utils.HttpUtils
 import com.example.android_demo_application.utities.ShouyeItem
+import kotlinx.android.synthetic.main.shouye.*
 import kotlinx.android.synthetic.main.shouye.view.*
 import kotlinx.android.synthetic.main.title_bar.view.*
 import kotlin.concurrent.thread
@@ -23,9 +27,19 @@ import kotlin.concurrent.thread
 class ShouyeFragment : Fragment() {
     private val loadingSuccess = 1
     private val loadingFail = 2
+    private val moreSuccess = 3
+
+    private var nextPage = 1
 
     private lateinit var fragmentView: View
-    private lateinit var progressDialog: ProgressDialog
+    private val progressDialog by lazy {
+        ProgressDialog(activity)
+    }
+    private val recyclerView by lazy {
+        fragmentView.shouyeRecyclerView
+    }
+
+    private val _itemList = ArrayList<ShouyeItem>()
 
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
@@ -33,14 +47,21 @@ class ShouyeFragment : Fragment() {
                 loadingSuccess -> {
                     if (progressDialog.isShowing) {
                         progressDialog.dismiss()
-                        setRecyclerView()
                     }
+                    setRecyclerView(_itemList)
                 }
                 loadingFail -> {
                     if (progressDialog.isShowing) {
                         progressDialog.dismiss()
-                        Toast.makeText(activity, "fail!", Toast.LENGTH_SHORT).show()
                     }
+                    Toast.makeText(activity, "fail!", Toast.LENGTH_SHORT).show()
+                }
+                moreSuccess -> {
+                    if (progressDialog.isShowing) {
+                        progressDialog.dismiss()
+                    }
+                    nextPage += 1
+                    notifyRecyclerView(msg.obj as Int)
                 }
             }
         }
@@ -57,14 +78,12 @@ class ShouyeFragment : Fragment() {
     }
 
     private fun init() {
-        progressDialog = ProgressDialog(activity)
-
         fragmentView.titleBar.refreshBtn.setOnClickListener {
             refresh()
         }
 
         fragmentView.titleBar.moreBtn.setOnClickListener {
-            Toast.makeText(activity, "More", Toast.LENGTH_SHORT).show()
+            more()
         }
 
         fragmentView.titleBar.backBtn.setOnClickListener {
@@ -75,6 +94,54 @@ class ShouyeFragment : Fragment() {
     }
 
     private fun refresh() {
+        showProgressDialog()
+
+        // get first page and set recyclerView
+        val pool = MyApplication.getPools()
+        pool.execute {
+            val itemList = HttpUtils.getLists(0)
+            val msg = Message()
+            if (itemList.isNotEmpty()) {
+                msg.what = loadingSuccess
+                _itemList.addAll(itemList)
+            } else {
+                msg.what = loadingFail
+            }
+            handler.sendMessage(msg)
+        }
+    }
+
+    private fun more() {
+        showProgressDialog()
+
+        val pool = MyApplication.getPools()
+        pool.execute {
+            val itemList = HttpUtils.getLists(nextPage)
+            val msg = Message()
+            if (itemList.isNotEmpty()) {
+                msg.what = moreSuccess
+                msg.obj = _itemList.size
+                _itemList.addAll(itemList)
+            } else {
+                msg.what = loadingFail
+            }
+            handler.sendMessage(msg)
+        }
+    }
+
+    private fun setRecyclerView(itemList: List<ShouyeItem>) {
+        val layoutManager = LinearLayoutManager(activity)
+        recyclerView.layoutManager = layoutManager
+        val adapter = ShouyeAdapter(childFragmentManager, itemList)
+        recyclerView.adapter = adapter
+    }
+
+    private fun notifyRecyclerView(position: Int) {
+        recyclerView.adapter?.notifyItemInserted(position)
+        recyclerView.scrollToPosition(position)
+    }
+
+    private fun showProgressDialog() {
         progressDialog.apply {
             setMessage("loading...")
             setCancelable(false)
@@ -82,36 +149,13 @@ class ShouyeFragment : Fragment() {
         }
 
         // wait for 5s and send fail
-        thread {
+        MyApplication.getPools().execute {
             Thread.sleep(5000)
-            val msg = Message()
-            msg.what = loadingFail
-            handler.sendMessage(msg)
+            if (progressDialog.isShowing) {
+                val msg = Message()
+                msg.what = loadingFail
+                handler.sendMessage(msg)
+            }
         }
-
-        thread {
-            getWebResources()
-        }
-
-    }
-
-    private fun getWebResources() {
-        // TODO: get web resources and change it to loading success!
-        val msg = Message()
-        msg.what = loadingSuccess
-        handler.sendMessage(msg)
-    }
-
-    private fun setRecyclerView() {
-        val recyclerView = fragmentView.shouyeRecyclerView
-
-        val layoutManager = LinearLayoutManager(activity)
-        recyclerView.layoutManager = layoutManager
-        val adapter = ShouyeAdapter(childFragmentManager, getArticles())
-        recyclerView.adapter = adapter
-    }
-
-    private fun getArticles() : List<ShouyeItem> {
-        return listOf(ShouyeItem("k1t", "2020/11/30", "Test", "Test", "Test", "Test"))
     }
 }
