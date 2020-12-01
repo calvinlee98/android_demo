@@ -15,7 +15,7 @@ import com.example.android_demo_application.utities.ShouyeItem
 import kotlinx.android.synthetic.main.shouye_item_1.view.*
 import kotlinx.android.synthetic.main.shouye_item_2.view.*
 
-class ShouyeAdapter(private val fragmentManager: FragmentManager, private val itemList: List<ShouyeItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ShouyeAdapter(private val fragmentManager: FragmentManager, private val itemList: List<ShouyeItem>, private val fragmentList: List<Fragment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
 
@@ -38,7 +38,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager, private val it
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is BannerViewHolder) {
             // TODO: when there is no banner pics
-            val adapter = ShouyeBannerAdapter(fragmentManager, listOf(ShouyeBannerFragment()))
+            val adapter = ShouyeBannerAdapter(fragmentManager, fragmentList)
             holder.itemView.bannerViewPager.adapter = adapter
         } else {
             holder.itemView.apply {
