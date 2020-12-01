@@ -1,10 +1,15 @@
 package com.example.android_demo_application.utils;
 
+import com.example.android_demo_application.utities.ShouyeItem;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -17,6 +22,7 @@ public class HttpUtils {
 
     public static String LOGIN_URL = "https://www.wanandroid.com/user/login";
     public static String REGISTER_URL = "https://www.wanandroid.com/user/register";
+    public static String ARTICLES_LIST = "https://www.wanandroid.com/article/list/";
     public static String LOGOUT_URL = "https://www.wanandroid.com/user/logout/json";
 
   public static String login(String username,String passoword){
@@ -49,6 +55,37 @@ public class HttpUtils {
            return "格式错误！";
        }
 
+
+   }
+
+   public static List<ShouyeItem> getLists(int page)  {
+      String url = ARTICLES_LIST+page+"/json";
+
+      OkHttpClient client = new OkHttpClient();
+
+      Request request = new Request.Builder().url(url).build();
+
+      Response response = null;
+      String responseData = null;
+
+       try {
+           response = client.newCall(request).execute();
+           responseData = response.body().string();
+           JSONObject jsonObject = new JSONObject(responseData);
+           jsonObject = jsonObject.getJSONObject("data");
+           JSONArray jsonArray =  jsonObject.getJSONArray("datas");
+           List<ShouyeItem>list = new ArrayList<>();
+           for(int i=0;i<jsonArray.length();++i){
+               JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+               list.add(new ShouyeItem(jsonObject1.getString("author"),jsonObject1.getString("publishTime"),
+                       jsonObject1.getString("title"),"",jsonObject1.getString("superChapterName"),
+                       jsonObject1.getString("link")));
+           }
+           return list;
+
+       } catch (Exception e) {
+           return new ArrayList<>();
+       }
 
    }
 }
