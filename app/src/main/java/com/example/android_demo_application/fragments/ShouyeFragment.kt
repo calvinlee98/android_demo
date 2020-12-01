@@ -20,7 +20,7 @@ class ShouyeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.shouye, container, false).also {
-            recyclerView = it.shouyeRecyclerView
+            recyclerView = it.findViewById(R.id.shouyeRecyclerView)
         }
     }
 

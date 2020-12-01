@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         //pager
         pager.setAdapter(adapter);
 
+        pager.setOffscreenPageLimit(3);
+
         tabLayout.setupWithViewPager(pager);
 
         initTab();
