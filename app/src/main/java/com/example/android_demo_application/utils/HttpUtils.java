@@ -1,5 +1,8 @@
 package com.example.android_demo_application.utils;
 
+import android.util.Log;
+
+import com.example.android_demo_application.activities.LogActivity;
 import com.example.android_demo_application.utities.ShouyeItem;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -77,9 +80,6 @@ public class HttpUtils {
            JSONObject jsonObject = new JSONObject(responseData);
            JSONObject jsonObject1 = jsonObject.getJSONObject("data");
            JSONArray jsonArray = jsonObject1.getJSONArray("datas");
-
-
-
            List<ShouyeItem>list = new ArrayList<>();
            for(int i=0;i<jsonArray.length();++i){
                JSONObject object = jsonArray.getJSONObject(i);
@@ -88,8 +88,6 @@ public class HttpUtils {
                        object.getString("link")));
            }
           return list;
-
-
        } catch (Exception e) {
            return new ArrayList<>();
        }
