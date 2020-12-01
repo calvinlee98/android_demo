@@ -1,33 +1,14 @@
 package com.example.android_demo_application.activities;
-
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.PersistableBundle;
-import android.os.RemoteException;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-
-import com.example.android_demo_application.ILogAndRegisterInterface;
-import com.example.android_demo_application.MyApplication;
 import com.example.android_demo_application.R;
 import com.example.android_demo_application.fragment_adapters.MainActivityAdapter;
 import com.example.android_demo_application.fragments.ShouyeFragment;
 import com.example.android_demo_application.fragments.WodeFragment;
-import com.example.android_demo_application.services.ILogAndRegisterService;
 import com.google.android.material.tabs.TabLayout;
-
 import java.util.ArrayList;
 import java.util.List;
 
