@@ -36,8 +36,9 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager, private val it
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is BannerViewHolder) {
-            val viewPagerAdapter = ShouyeBannerAdapter(fragmentManager)
-            holder.itemView.bannerViewPager.adapter = viewPagerAdapter
+            // TODO: when there is no banner pics
+            val adapter = ShouyeBannerAdapter(fragmentManager, listOf(ShouyeBannerFragment()))
+            holder.itemView.bannerViewPager.adapter = adapter
         } else {
             holder.itemView.apply {
                 authorText.text = itemList[position-1].author
@@ -52,11 +53,11 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager, private val it
     override fun getItemCount() = itemList.size + 1
 }
 
-class ShouyeBannerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+class ShouyeBannerAdapter(fragmentManager: FragmentManager, private val bannerFragmentList: List<Fragment>) : FragmentStatePagerAdapter(fragmentManager) {
     override fun getItem(position: Int): Fragment {
-        return ShouyeBannerFragment()
+        return bannerFragmentList[position]
     }
-    override fun getCount() = 2
+    override fun getCount() = bannerFragmentList.size
 }
 
 class ShouyeItem(val author: String?, val publishTime: String?, val title: String?, val content: String?, val superChapterName: String?, val link: String?)
