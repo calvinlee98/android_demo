@@ -7,9 +7,16 @@ package com.example.android_demo_application.fragments;
 * */
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +30,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
+import com.example.android_demo_application.ILogAndRegisterInterface;
 import com.example.android_demo_application.MyApplication;
 import com.example.android_demo_application.R;
 import com.example.android_demo_application.activities.LogActivity;
+import com.example.android_demo_application.services.ILogAndRegisterService;
 import com.example.android_demo_application.views.MyButton;
 
 
@@ -92,14 +101,52 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
      xitongshezhi.setOnClickListener(this::onClick);
 
     }
+    ILogAndRegisterInterface iLogAndRegisterInterface = null;
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            iLogAndRegisterInterface = ILogAndRegisterInterface.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Intent intent = new Intent(getActivity(),ILogAndRegisterService.class);
+        getActivity().bindService(intent,connection,Context.BIND_AUTO_CREATE);
+    }
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            String string = (String) msg.obj;
+            Toast.makeText(MyApplication.getContext(),string,Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.qudenglu:
-                Intent intent = new Intent(getActivity(), LogActivity.class);
-                startActivity(intent);
-                break;
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String s = iLogAndRegisterInterface.login("lifangzheng","12345");
+                            Message message = Message.obtain();
+                            message.setTarget(handler);
+                            message.obj  = s;
+                            handler.sendMessage(message);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                MyApplication.getPools().execute(runnable);
+                 break;
             case R.id.wodejifen:
                 Toast.makeText(MyApplication.getContext(),"我的积分",Toast.LENGTH_SHORT).show();
                 break;

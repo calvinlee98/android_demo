@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.ShouyeAdapter
 import com.example.android_demo_application.fragment_adapters.ShouyeItem
-import kotlinx.android.synthetic.main.shouye.view.*
+//import kotlinx.android.synthetic.main.shouye.view.*
 
 class ShouyeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView

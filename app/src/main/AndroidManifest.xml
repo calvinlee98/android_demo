@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android_demo_application">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -18,7 +18,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.LogActivity"/>
-        <service android:name=".services.InternetService"/>
+        <service android:name=".services.ILogAndRegisterService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote"/>
     </application>
 
 </manifest>
