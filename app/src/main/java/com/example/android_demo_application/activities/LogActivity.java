@@ -1,10 +1,15 @@
 package com.example.android_demo_application.activities;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -48,5 +53,20 @@ public class LogActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        //如果window上view获取焦点 && view不为空
+        if(imm.isActive()&&getCurrentFocus()!=null){
+            //拿到view的token 不为空
+            if (getCurrentFocus().getWindowToken()!=null) {
+                //表示软键盘窗口总是隐藏，除非开始时以SHOW_FORCED显示。
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+        return true;
     }
 }
