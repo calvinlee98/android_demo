@@ -19,7 +19,7 @@
             android:hint="@string/qingshurumima"
             android:layout_weight="1">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_intput_username"
+                android:id="@+id/text_input_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"/>
@@ -92,6 +92,7 @@
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
     <Button
+        android:id="@+id/button"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="@string/zhuce"
