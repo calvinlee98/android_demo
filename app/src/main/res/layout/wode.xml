@@ -8,6 +8,15 @@
        android:layout_height="0dp"
        android:layout_weight="1"
        android:background="#1E90FF">
+       <com.google.android.material.button.MaterialButton
+           android:id="@+id/logout"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentRight="true"
+           android:layout_alignParentTop="true"
+           android:background="@android:color/transparent"
+           android:textColor="@color/white"
+           android:text="@string/dengchu"/>
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"

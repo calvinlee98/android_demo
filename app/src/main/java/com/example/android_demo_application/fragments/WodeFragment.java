@@ -36,11 +36,12 @@ import com.example.android_demo_application.R;
 
 import com.example.android_demo_application.activities.LogActivity;
 import com.example.android_demo_application.utils.HttpUtils;
+import com.example.android_demo_application.utils.SharedPreferenceUtils;
 import com.example.android_demo_application.views.MyButton;
 
 
 public class WodeFragment extends Fragment implements View.OnClickListener {
-
+     Button button_logout;
     View view;
     Button button;
     //MyButton extends FrameLayout  是一个FrameLayout
@@ -64,6 +65,7 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
 
     void initView(){
         button = view.findViewById(R.id.qudenglu);
+        button_logout = view.findViewById(R.id.logout);
         wodejifen = view.findViewById(R.id.wodejifen);
         wodefenxiang = view.findViewById(R.id.wodefenxiang);
         wodeshoucang = view.findViewById(R.id.wodeshoucang);
@@ -95,6 +97,7 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
 
 
      button.setOnClickListener(this::onClick);
+     button_logout.setOnClickListener(this::onClick);
      wodejifen.setOnClickListener(this::onClick);
      wodefenxiang.setOnClickListener(this::onClick);
      wodeshoucang.setOnClickListener(this::onClick);
@@ -112,8 +115,10 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
         if(isVisibleToUser) {
             if (MyApplication.isIsLoggedIn()) {
                 button.setText(MyApplication.getUserName());
+                button_logout.setVisibility(View.VISIBLE);
             } else {
                 button.setText(R.string.qudenglu);
+                button_logout.setVisibility(View.GONE);
             }
         }
 
@@ -129,11 +134,35 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
         super.onResume();
         if (MyApplication.isIsLoggedIn()) {
             button.setText(MyApplication.getUserName());
+            button_logout.setVisibility(View.VISIBLE);
         } else {
             button.setText(R.string.qudenglu);
+            button_logout.setVisibility(View.GONE);
         }
     }
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            String s = (String) msg.obj;
+            if(s.equals("")){
+                //没有错误
+                //登出
+                MyApplication.setIsLoggedIn(false);
+                MyApplication.setUserName("");
+                //清空缓存
+                SharedPreferenceUtils.empty();
 
+                button_logout.setVisibility(View.GONE);
+                button.setText(R.string.qudenglu);
+                view.requestLayout();
+
+            }
+            else {
+                Toast.makeText(MyApplication.getContext(),s,Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -141,7 +170,22 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(), LogActivity.class);
                 startActivity(intent);
                 break;
-
+            case R.id.logout:
+                //登出逻辑
+                //发送http请求
+                //更新UI    登出应该消失
+                //删除本地 SharedPreference
+                 MyApplication.getPools().execute(new Runnable() {
+                     @Override
+                     public void run() {
+                         String s = HttpUtils.logout();
+                         Message message = Message.obtain();
+                         message.setTarget(handler);
+                         message.obj = s;
+                         handler.sendMessage(message);
+                     }
+                 });
+                 break;
             case R.id.wodejifen:
                 Toast.makeText(MyApplication.getContext(),"我的积分",Toast.LENGTH_SHORT).show();
                 break;

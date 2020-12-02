@@ -35,25 +35,24 @@ public class LogActivity extends AppCompatActivity {
 
 
         button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager1 = getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager1.beginTransaction();
-                if(STATE==LOGIN){
-                    //转移到 注册页面
-                    STATE = REGISTER;
-                    transaction.replace(R.id.fragment_container,new RegisterFragment()).commit();
-                    button.setText(R.string.qudenglu);
-                }
-                else{
-                    STATE = LOGIN;
-                    transaction.replace(R.id.fragment_container,new LoginFragment()).commit();
-                    button.setText(R.string.quzhuce);
-                }
+        button.setOnClickListener(v -> {
+            FragmentManager fragmentManager1 = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager1.beginTransaction();
+            if(STATE==LOGIN){
+                //转移到 注册页面
+                STATE = REGISTER;
+                transaction.replace(R.id.fragment_container,new RegisterFragment()).commit();
+                button.setText(R.string.qudenglu);
+            }
+            else{
+                STATE = LOGIN;
+                transaction.replace(R.id.fragment_container,new LoginFragment()).commit();
+                button.setText(R.string.quzhuce);
             }
         });
+
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override

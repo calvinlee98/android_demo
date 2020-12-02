@@ -93,4 +93,22 @@ public class HttpUtils {
        }
 
    }
+
+   public static String logout(){
+      OkHttpClient client = new OkHttpClient();
+      Request request = new Request.Builder().url(LOGOUT_URL).build();
+
+      Response response = null;
+      String responseData = null;
+
+      try{
+      response = client.newCall(request).execute();
+      responseData = response.body().string();
+      JSONObject jsonObject = new JSONObject(responseData);
+      return jsonObject.getString("errorMsg");
+      }
+      catch (Exception e){
+          return "登出错误！";
+      }
+   }
 }
