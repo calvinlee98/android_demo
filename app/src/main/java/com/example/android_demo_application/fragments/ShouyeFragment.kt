@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.ShouyeAdapter
+import com.example.android_demo_application.utils.BannerUtil
 import com.example.android_demo_application.utils.HttpUtils
 import com.example.android_demo_application.utities.ShouyeItem
 import kotlinx.android.synthetic.main.shouye.*
@@ -40,6 +41,7 @@ class ShouyeFragment : Fragment() {
     }
 
     private val _itemList = ArrayList<ShouyeItem>()
+    private val _bannerList = ArrayList<ShouyeBannerFragment>()
 
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
@@ -48,7 +50,7 @@ class ShouyeFragment : Fragment() {
                     if (progressDialog.isShowing) {
                         progressDialog.dismiss()
                     }
-                    setRecyclerView(_itemList)
+                    setRecyclerView(_itemList, _bannerList)
                 }
                 loadingFail -> {
                     if (progressDialog.isShowing) {
@@ -97,12 +99,14 @@ class ShouyeFragment : Fragment() {
         showProgressDialog()
 
         // get first page and set recyclerView
-        val pool = MyApplication.getPools()
-        pool.execute {
+        MyApplication.getPools().execute {
             _itemList.clear()
+            _bannerList.clear()
             nextPage = 1
 
             val itemList = HttpUtils.getLists(0)
+            val bannerList = BannerUtil.getBannerList()
+            _bannerList.addAll(bannerList)
             val msg = Message()
             if (itemList.isNotEmpty()) {
                 msg.what = loadingSuccess
@@ -117,8 +121,7 @@ class ShouyeFragment : Fragment() {
     private fun more() {
         showProgressDialog()
 
-        val pool = MyApplication.getPools()
-        pool.execute {
+        MyApplication.getPools().execute {
             val itemList = HttpUtils.getLists(nextPage)
             val msg = Message()
             if (itemList.isNotEmpty()) {
@@ -132,10 +135,10 @@ class ShouyeFragment : Fragment() {
         }
     }
 
-    private fun setRecyclerView(itemList: List<ShouyeItem>) {
+    private fun setRecyclerView(itemList: List<ShouyeItem>, bannerList: List<ShouyeBannerFragment>) {
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
-        val adapter = ShouyeAdapter(childFragmentManager, itemList, listOf(ShouyeBannerFragment()))
+        val adapter = ShouyeAdapter(childFragmentManager, itemList, bannerList)
         recyclerView.adapter = adapter
     }
 

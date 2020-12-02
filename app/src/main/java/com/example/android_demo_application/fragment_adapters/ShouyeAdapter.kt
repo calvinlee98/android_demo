@@ -15,7 +15,7 @@ import com.example.android_demo_application.utities.ShouyeItem
 import kotlinx.android.synthetic.main.shouye_item_1.view.*
 import kotlinx.android.synthetic.main.shouye_item_2.view.*
 
-class ShouyeAdapter(private val fragmentManager: FragmentManager, private val itemList: List<ShouyeItem>, private val fragmentList: List<Fragment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ShouyeAdapter(private val fragmentManager: FragmentManager, private val itemList: List<ShouyeItem>, private val fragmentList: List<ShouyeBannerFragment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
 
