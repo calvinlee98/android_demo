@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 
 
+import com.example.android_demo_application.fragments.ShouyeFragment;
+import com.example.android_demo_application.fragments.WodeFragment;
 
 import java.util.List;
 
@@ -21,18 +23,22 @@ public class MainActivityAdapter extends FragmentPagerAdapter {
     List<Fragment>list;
     public MainActivityAdapter(FragmentManager fm,List<Fragment>l){
         super(fm);
-        this.list = l;
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return 4;
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return list.get(position);
+        if(position==0)
+            return new ShouyeFragment();
+        else if(position==3)
+            return new WodeFragment();
+        else
+            return new ShouyeFragment();
     }
 
 }

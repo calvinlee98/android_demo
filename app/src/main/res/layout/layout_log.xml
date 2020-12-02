@@ -1,6 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+        <ImageView
+            android:id="@+id/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/android"
+            android:layout_centerHorizontal="true"/>
+        <LinearLayout
+            android:layout_below="@+id/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
+            <TextView
+                android:textColor="@color/teal_700"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="欢迎使用"
+                android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="10dp"
+                android:text="本app完全由Goweii独立开发"
+                android:textColor="@color/teal_700"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/teal_700"
+            android:text="@string/zhuce"/>
+    </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+        
+    </FrameLayout>
+</LinearLayout>

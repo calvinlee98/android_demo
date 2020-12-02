@@ -34,11 +34,13 @@ import androidx.fragment.app.Fragment;
 import com.example.android_demo_application.MyApplication;
 import com.example.android_demo_application.R;
 
+import com.example.android_demo_application.activities.LogActivity;
 import com.example.android_demo_application.utils.HttpUtils;
 import com.example.android_demo_application.views.MyButton;
 
 
 public class WodeFragment extends Fragment implements View.OnClickListener {
+
     View view;
     Button button;
     //MyButton extends FrameLayout  是一个FrameLayout
@@ -57,6 +59,8 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
         initView();
         return view;
     }
+
+
 
     void initView(){
         button = view.findViewById(R.id.qudenglu);
@@ -103,36 +107,41 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser) {
+            if (MyApplication.isIsLoggedIn()) {
+                button.setText(MyApplication.getUserName());
+            } else {
+                button.setText(R.string.qudenglu);
+            }
+        }
+
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-
-
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            String string = (String) msg.obj;
-            Toast.makeText(MyApplication.getContext(),string,Toast.LENGTH_SHORT).show();
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (MyApplication.isIsLoggedIn()) {
+            button.setText(MyApplication.getUserName());
+        } else {
+            button.setText(R.string.qudenglu);
         }
-    };
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.qudenglu:
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                            String s = HttpUtils.login("lifangzheng","12345");
-                            Message message = Message.obtain();
-                            message.setTarget(handler);
-                            message.obj  = s;
-                            handler.sendMessage(message);
-                    }
-                };
-                MyApplication.getPools().execute(runnable);
-                 break;
+                Intent intent = new Intent(getActivity(), LogActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.wodejifen:
                 Toast.makeText(MyApplication.getContext(),"我的积分",Toast.LENGTH_SHORT).show();
                 break;
