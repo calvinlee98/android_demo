@@ -22,12 +22,16 @@ import kotlinx.android.synthetic.main.title_bar.view.*
 
 
 class ShouyeFragment : Fragment() {
+    // message type
     private val refreshSuccess = 1
     private val refreshFail = 2
     private val moreSuccess = 3
     private val moreFail = 4
 
+    // the page number for more button
     private var nextPage = 1
+
+    // id
     private var currRefresh = 0
     private var currMore = 0
 
