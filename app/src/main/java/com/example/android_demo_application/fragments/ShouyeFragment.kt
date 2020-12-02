@@ -25,8 +25,11 @@ class ShouyeFragment : Fragment() {
     private val refreshSuccess = 1
     private val refreshFail = 2
     private val moreSuccess = 3
+    private val moreFail = 4
 
     private var nextPage = 1
+    private var currRefresh = 0
+    private var currMore = 0
 
     private lateinit var fragmentView: View
     private val progressDialog by lazy {
@@ -46,21 +49,31 @@ class ShouyeFragment : Fragment() {
                     if (progressDialog.isShowing) {
                         progressDialog.dismiss()
                     }
+                    currRefresh = if (currRefresh == 100) 0 else currRefresh + 1
                     recyclerView.removeAllViews()
                     notifyRecyclerView(0)
                 }
                 refreshFail -> {
                     if (progressDialog.isShowing) {
                         progressDialog.dismiss()
-                        Toast.makeText(activity, "fail!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, "refresh fail", Toast.LENGTH_SHORT).show()
                     }
+                    currRefresh = if (currRefresh == 100) 0 else currRefresh + 1
                 }
                 moreSuccess -> {
                     if (progressDialog.isShowing) {
                         progressDialog.dismiss()
                     }
+                    currMore = if (currMore == 100) 0 else currMore + 1
                     nextPage += 1
                     notifyRecyclerView(msg.obj as Int)
+                }
+                moreFail -> {
+                    if (progressDialog.isShowing) {
+                        progressDialog.dismiss()
+                        Toast.makeText(activity, "more fail", Toast.LENGTH_SHORT).show()
+                    }
+                    currMore = if (currMore == 100) 0 else currMore + 1
                 }
             }
         }
@@ -99,7 +112,7 @@ class ShouyeFragment : Fragment() {
     }
 
     private fun refresh() {
-        showProgressDialog()
+        showProgressDialog(currRefresh, 0)
 
         _itemList.clear()
         _bannerList.clear()
@@ -113,22 +126,26 @@ class ShouyeFragment : Fragment() {
             if (itemList.isNotEmpty()) {
                 _itemList.addAll(itemList)
                 handler.sendEmptyMessage(refreshSuccess)
+            } else {
+                handler.sendEmptyMessage(refreshFail)
             }
         }
     }
 
     private fun more() {
-        showProgressDialog()
+        showProgressDialog(currMore, 1)
 
         MyApplication.getPools().execute {
             val itemList = HttpUtils.getLists(nextPage)
+            val msg = Message()
             if (itemList.isNotEmpty()) {
-                val msg = Message()
                 msg.what = moreSuccess
                 msg.obj = _itemList.size + 1
                 _itemList.addAll(itemList)
-                handler.sendMessage(msg)
+            } else {
+                msg.what = refreshFail
             }
+            handler.sendMessage(msg)
         }
     }
 
@@ -142,20 +159,31 @@ class ShouyeFragment : Fragment() {
     private fun notifyRecyclerView(position: Int) {
         recyclerView.adapter?.notifyItemInserted(position)
         val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-        layoutManager.scrollToPositionWithOffset(position, 0)
+        if (position == 0) {
+            layoutManager.scrollToPositionWithOffset(position, 0)
+        } else {
+            layoutManager.scrollToPositionWithOffset(position-1, 0)
+        }
     }
 
     // TODO: bug: when a new task is running(eg, more) and the progressDialog shows again(a new thread), this previous thread will send a refreshFail, which should not happen.
-    private fun showProgressDialog() {
+    private fun showProgressDialog(id: Int, type: Int) {
         progressDialog.show()
 
         // wait for 5s and send fail
         MyApplication.getPools().execute {
             Thread.sleep(5000)
-            if (progressDialog.isShowing) {
-                val msg = Message()
-                msg.what = refreshFail
-                handler.sendMessage(msg)
+            when (type) {
+                0 -> {
+                    if (currRefresh == id) {
+                        handler.sendEmptyMessage(refreshFail)
+                    }
+                }
+                1 -> {
+                    if (currMore == id) {
+                        handler.sendEmptyMessage(refreshFail)
+                    }
+                }
             }
         }
     }
