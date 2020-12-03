@@ -1,6 +1,7 @@
 package com.example.android_demo_application.utities
 
-class ShouyeItem(val author: String?,
+class ShouyeItem(val articleId:String?,
+        val author: String?,
                  val publishTime: String?,
                  val title: String?,
                  val content: String?,
