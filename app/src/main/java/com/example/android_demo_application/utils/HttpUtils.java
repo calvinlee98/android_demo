@@ -43,7 +43,24 @@ public class HttpUtils {
     public static String CANCEL_LIKE = "https://www.wanandroid.com/lg/uncollect_originId/";//需要拼接  post方法
 
 
+  public static String getLikeArticle(String articleId){
+      OkHttpClient client = new OkHttpClient();
 
+      RequestBody requestBody = new FormBody.Builder().build();
+      Request request = new Request.Builder().post(requestBody).url(LIKE_ARTICLE+articleId+"/json").build();
+
+      Response response;
+      String responseData;
+
+      try {
+      response =  client.newCall(request).execute();
+      responseData = response.body().string();
+      return responseData;
+      }catch (Exception e){
+          return "添加喜欢失败！";
+      }
+
+  }
 
   public static String login(String username,String passoword){
       RequestBody requestBody = new FormBody.Builder().add("username",username).add("password",passoword).build();
