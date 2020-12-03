@@ -54,13 +54,13 @@ class ShouyeFragment : Fragment() {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 refreshSuccess -> {
-                    if (progressDialog.isShowing) {
-                        progressDialog.dismiss()
-                    }
-
                     val messageObj = msg.obj as MessageObj
                     if (messageObj.id == refreshId) {
                         refreshId = if (refreshId == 100) 0 else refreshId + 1
+
+                        if (progressDialog.isShowing) {
+                            progressDialog.dismiss()
+                        }
 
                         _itemList.clear()
                         _bannerList.clear()
@@ -195,7 +195,8 @@ class ShouyeFragment : Fragment() {
     }
 
     private fun notifyRecyclerView(position: Int) {
-        recyclerView.adapter?.notifyItemInserted(position)
+//        recyclerView.adapter?.notifyItemInserted(position)
+        recyclerView.adapter?.notifyDataSetChanged()
         val layoutManager = recyclerView.layoutManager as LinearLayoutManager
         layoutManager.scrollToPosition(position)
     }
