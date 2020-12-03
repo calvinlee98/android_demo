@@ -33,7 +33,7 @@ public class FavoritesActivity extends AppCompatActivity {
     }
     private void init(){
         recyclerView = findViewById(R.id.rv);
-        adapter = new FavoriteArticlesAdapter();
+        adapter = new FavoriteArticlesAdapter(handler);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

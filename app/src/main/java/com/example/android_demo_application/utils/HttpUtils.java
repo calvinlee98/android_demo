@@ -33,6 +33,7 @@ public class HttpUtils {
 
     public static String FAVORITES_ARTICLES = "https://www.wanandroid.com/lg/collect/list/";//需要拼接  get方法
     public static String LIKE_ARTICLE = "https://www.wanandroid.com/lg/collect/";// 需要拼接  post方法
+    public static String CANCEL_LIKE = "https://www.wanandroid.com/lg/uncollect_originId/";//需要拼接  post方法
 
 
 
@@ -90,8 +91,13 @@ public class HttpUtils {
            List<ShouyeItem>list = new ArrayList<>();
            for(int i=0;i<jsonArray.length();++i){
                JSONObject object = jsonArray.getJSONObject(i);
-               list.add(new ShouyeItem(object.getString("author"),object.getString("publishTime"),
-                       object.getString("title"),"",object.getString("superChapterName"),
+               list.add(new ShouyeItem(
+                       object.getString("id"),
+                       object.getString("author"),
+                       object.getString("publishTime"),
+                       object.getString("title"),
+                       "",
+                       object.getString("superChapterName"),
                        object.getString("link")));
            }
           return list;
@@ -138,14 +144,17 @@ public class HttpUtils {
           JSONObject jsonObject1 = jsonObject.getJSONObject("data");
           JSONArray jsonArray = jsonObject1.getJSONArray("datas");
           List<ShouyeItem>list = new ArrayList<>();
-          Log.d("TAG",jsonArray.length()+"");
           for(int i=0;i<jsonArray.length();++i){
               JSONObject object = jsonArray.getJSONObject(i);
-              list.add(new ShouyeItem(object.getString("author"),object.getString("publishTime"),
-                      object.getString("title"),"",object.getString("chapterName"),
+              list.add(new ShouyeItem(
+                      object.getString("originId"),
+                      object.getString("author"),
+                      object.getString("publishTime"),
+                      object.getString("title"),
+                      "",
+                      object.getString("chapterName"),
                       object.getString("link")));
       }
-          Log.d("TAG","返回前list的大小"+list.size());
           return list;
       }
       catch (Exception e){
@@ -153,4 +162,23 @@ public class HttpUtils {
 
    }
 }
+    public static String cancelLike(String page_id){
+       String url = CANCEL_LIKE+page_id+"/json";
+       String cookieInfo = "loginUserName="+SharedPreferenceUtils.getSavedUserName()+";loginUserPassword="+SharedPreferenceUtils.getSavedPassword();
+       OkHttpClient client  = new OkHttpClient();
+       RequestBody requestBody = new FormBody.Builder().build();
+       Request request = new Request.Builder().url(url).post(requestBody).header("Cookie",cookieInfo).build();
+
+       Response response = null;
+       String responseData = null;
+
+       try {
+       response = client.newCall(request).execute();
+       responseData = response.body().string();
+       Log.d("TAG",responseData);
+       return new JSONObject(responseData).getString("errorMsg");
+       }catch (Exception e){
+           return "取消收藏错误！";
+       }
+    }
 }
