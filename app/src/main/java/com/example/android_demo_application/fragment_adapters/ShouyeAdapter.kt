@@ -1,21 +1,28 @@
 package com.example.android_demo_application.fragment_adapters
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_demo_application.R
+import com.example.android_demo_application.animators.AnimatorHelper
 import com.example.android_demo_application.fragments.ShouyeBannerFragment
 import com.example.android_demo_application.utities.ShouyeItem
 import kotlinx.android.synthetic.main.shouye_item_1.view.*
 import kotlinx.android.synthetic.main.shouye_item_2.view.*
 
 class ShouyeAdapter(private val fragmentManager: FragmentManager, private val itemList: List<ShouyeItem>, private val fragmentList: List<ShouyeBannerFragment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+
 
     inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
 
@@ -28,6 +35,16 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager, private val it
         BannerViewHolder(view)
     } else {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.shouye_item_2, parent, false)
+
+        val imageButton = view.findViewById<ImageButton>(R.id.likeBtn)
+        imageButton.setOnClickListener({
+
+             AnimatorHelper.playFirstAnimator(imageButton)
+
+
+
+        })
+
         val holder = ItemViewHolder(view)
         holder.itemView.setOnClickListener {
             Toast.makeText(parent.context, "Clicked!", Toast.LENGTH_SHORT).show()
