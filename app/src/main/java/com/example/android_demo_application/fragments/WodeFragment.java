@@ -34,6 +34,7 @@ import androidx.fragment.app.Fragment;
 import com.example.android_demo_application.MyApplication;
 import com.example.android_demo_application.R;
 
+import com.example.android_demo_application.activities.FavoritesActivity;
 import com.example.android_demo_application.activities.LogActivity;
 import com.example.android_demo_application.utils.HttpUtils;
 import com.example.android_demo_application.utils.SharedPreferenceUtils;
@@ -193,7 +194,15 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(MyApplication.getContext(),"我的分享",Toast.LENGTH_SHORT).show();
                 break;
                 case R.id.wodeshoucang:
-                Toast.makeText(MyApplication.getContext(),"我的收藏",Toast.LENGTH_SHORT).show();
+                    Intent intent1;
+                if(MyApplication.isIsLoggedIn()){
+                       intent1 = new Intent(getActivity(), FavoritesActivity.class);
+                       startActivity(intent1);
+                }
+                else{
+                    intent1 = new Intent(getActivity(),LogActivity.class);
+                    startActivity(intent1);
+                }
                 break;
             case R.id.shaohouyuedu:
                 Toast.makeText(MyApplication.getContext(),"稍后阅读",Toast.LENGTH_SHORT).show();
