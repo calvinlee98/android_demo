@@ -43,7 +43,7 @@ public class HttpUtils {
     public static String CANCEL_LIKE = "https://www.wanandroid.com/lg/uncollect_originId/";//需要拼接  post方法
 
 
-  public static String getLikeArticle(String articleId){
+  public static String likeArticle(String articleId){
       OkHttpClient client = new OkHttpClient();
 
       RequestBody requestBody = new FormBody.Builder().build();
