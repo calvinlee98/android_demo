@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.LogActivity"/>
+        <activity android:name=".activities.FavoritesActivity"/>
     </application>
 
 </manifest>

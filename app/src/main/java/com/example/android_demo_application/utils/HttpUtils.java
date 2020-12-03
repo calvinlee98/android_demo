@@ -35,6 +35,13 @@ public class HttpUtils {
     public static String LOGOUT_URL = "https://www.wanandroid.com/user/logout/json";
     public static String BANNER_URL = "https://www.wanandroid.com/banner/json";
 
+
+    public static String FAVORITES_ARTICLES = "https://www.wanandroid.com/lg/collect/list/";//需要拼接  get方法
+    public static String LIKE_ARTICLE = "https://www.wanandroid.com/lg/collect/";// 需要拼接  post方法
+
+
+
+
   public static String login(String username,String passoword){
       RequestBody requestBody = new FormBody.Builder().add("username",username).add("password",passoword).build();
       return postGetErrorMsg(LOGIN_URL,requestBody);
@@ -159,4 +166,39 @@ public class HttpUtils {
           return "登出错误！";
       }
    }
+
+   public static List<ShouyeItem> getFavorites(int page){
+      OkHttpClient client = new OkHttpClient();
+
+      String cookieInfo = "loginUserName="+SharedPreferenceUtils.getSavedUserName()+";loginUserPassword="+SharedPreferenceUtils.getSavedPassword();
+
+      Request request = new Request.Builder().url(FAVORITES_ARTICLES+page+"/json").header("Cookie",cookieInfo).build();
+
+      Response response = null;
+      String responseData = null;
+
+      try{
+          response = client.newCall(request).execute();
+          responseData = response.body().string();
+          Log.d("TAG",responseData);
+
+          JSONObject jsonObject = new JSONObject(responseData);
+          JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+          JSONArray jsonArray = jsonObject1.getJSONArray("datas");
+          List<ShouyeItem>list = new ArrayList<>();
+          Log.d("TAG",jsonArray.length()+"");
+          for(int i=0;i<jsonArray.length();++i){
+              JSONObject object = jsonArray.getJSONObject(i);
+              list.add(new ShouyeItem(object.getString("author"),object.getString("publishTime"),
+                      object.getString("title"),"",object.getString("chapterName"),
+                      object.getString("link")));
+      }
+          Log.d("TAG","返回前list的大小"+list.size());
+          return list;
+      }
+      catch (Exception e){
+          return new ArrayList<>();
+
+   }
+}
 }
