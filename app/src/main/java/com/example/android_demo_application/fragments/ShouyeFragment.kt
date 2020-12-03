@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.ShouyeAdapter
-import com.example.android_demo_application.utils.BannerUtil
 import com.example.android_demo_application.utils.HttpUtils
 import com.example.android_demo_application.utities.ShouyeItem
 import kotlinx.android.synthetic.main.shouye.view.*
@@ -32,9 +31,10 @@ class ShouyeFragment : Fragment() {
     private var nextPage = 1
 
     // id
-    private var currRefresh = 0
-    private var currMore = 0
+    @Volatile private var refreshId = 0
+    @Volatile private var moreId = 0
 
+    // view
     private lateinit var fragmentView: View
     private val progressDialog by lazy {
         ProgressDialog(activity)
@@ -43,8 +43,12 @@ class ShouyeFragment : Fragment() {
         fragmentView.shouyeRecyclerView
     }
 
+    // variables
     private val _itemList = ArrayList<ShouyeItem>()
     private val _bannerList = ArrayList<ShouyeBannerFragment>()
+
+    // message obj
+    inner class MessageObj (val id: Int, val obj: Any?)
 
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
@@ -53,31 +57,62 @@ class ShouyeFragment : Fragment() {
                     if (progressDialog.isShowing) {
                         progressDialog.dismiss()
                     }
-                    currRefresh = if (currRefresh == 100) 0 else currRefresh + 1
-                    recyclerView.removeAllViews()
-                    notifyRecyclerView(0)
+
+                    val messageObj = msg.obj as MessageObj
+                    if (messageObj.id == refreshId) {
+                        refreshId = if (refreshId == 100) 0 else refreshId + 1
+
+                        _itemList.clear()
+                        _bannerList.clear()
+                        nextPage = 1
+
+                        val pair = messageObj.obj as Pair<List<ShouyeItem>, List<ShouyeBannerFragment>>
+                        _itemList.addAll(pair.first)
+                        _bannerList.addAll(pair.second)
+
+                        if (recyclerView.childCount > 0) {
+                            recyclerView.removeAllViews()
+                        }
+                        notifyRecyclerView(0)
+                    }
                 }
                 refreshFail -> {
-                    if (progressDialog.isShowing) {
-                        progressDialog.dismiss()
+                    val messageObj = msg.obj as MessageObj
+                    if (messageObj.id == refreshId) {
+                        refreshId = if (refreshId == 100) 0 else refreshId + 1
+
+                        if (progressDialog.isShowing) {
+                            progressDialog.dismiss()
+                        }
                         Toast.makeText(activity, "refresh fail", Toast.LENGTH_SHORT).show()
                     }
-                    currRefresh = if (currRefresh == 100) 0 else currRefresh + 1
                 }
                 moreSuccess -> {
-                    if (progressDialog.isShowing) {
-                        progressDialog.dismiss()
+                    val messageObj = msg.obj as MessageObj
+                    if (messageObj.id == moreId) {
+                        moreId = if (moreId == 100) 0 else moreId + 1
+
+                        if (progressDialog.isShowing) {
+                            progressDialog.dismiss()
+                        }
+
+                        nextPage += 1
+
+                        val size = _itemList.size + 1
+                        _itemList.addAll(messageObj.obj as List<ShouyeItem>)
+                        notifyRecyclerView(size)
                     }
-                    currMore = if (currMore == 100) 0 else currMore + 1
-                    nextPage += 1
-                    notifyRecyclerView(msg.obj as Int)
                 }
                 moreFail -> {
-                    if (progressDialog.isShowing) {
-                        progressDialog.dismiss()
+                    val messageObj = msg.obj as MessageObj
+                    if (messageObj.id == moreId) {
+                        moreId = if (moreId == 100) 0 else moreId + 1
+
+                        if (progressDialog.isShowing) {
+                            progressDialog.dismiss()
+                        }
                         Toast.makeText(activity, "more fail", Toast.LENGTH_SHORT).show()
                     }
-                    currMore = if (currMore == 100) 0 else currMore + 1
                 }
             }
         }
@@ -116,37 +151,36 @@ class ShouyeFragment : Fragment() {
     }
 
     private fun refresh() {
-        showProgressDialog(currRefresh, 0)
-
-        _itemList.clear()
-        _bannerList.clear()
-        nextPage = 1
+        progressDialog.show()
+        val id = refreshId
 
         // get first page
         MyApplication.getPools().execute {
-            val itemList = HttpUtils.getLists(0)
-            val bannerList = BannerUtil.getBannerList()
-            _bannerList.addAll(bannerList)
-            if (itemList.isNotEmpty()) {
-                _itemList.addAll(itemList)
-                handler.sendEmptyMessage(refreshSuccess)
+            val pair = HttpUtils.refresh()
+            val msg = Message()
+            if (pair != null) {
+                msg.obj = MessageObj(id, pair)
+                msg.what = refreshSuccess
             } else {
-                handler.sendEmptyMessage(refreshFail)
+                msg.obj = MessageObj(id, null)
+                msg.what = refreshFail
             }
+            handler.sendMessage(msg)
         }
     }
 
     private fun more() {
-        showProgressDialog(currMore, 1)
+        progressDialog.show()
 
+        val id = moreId
         MyApplication.getPools().execute {
             val itemList = HttpUtils.getLists(nextPage)
             val msg = Message()
             if (itemList.isNotEmpty()) {
+                msg.obj = MessageObj(id, itemList)
                 msg.what = moreSuccess
-                msg.obj = _itemList.size + 1
-                _itemList.addAll(itemList)
             } else {
+                msg.obj = MessageObj(id, null)
                 msg.what = refreshFail
             }
             handler.sendMessage(msg)
@@ -163,32 +197,7 @@ class ShouyeFragment : Fragment() {
     private fun notifyRecyclerView(position: Int) {
         recyclerView.adapter?.notifyItemInserted(position)
         val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-        if (position == 0) {
-            layoutManager.scrollToPositionWithOffset(position, 0)
-        } else {
-            layoutManager.scrollToPositionWithOffset(position-1, 0)
-        }
+        layoutManager.scrollToPosition(position)
     }
 
-    // TODO: bug: when a new task is running(eg, more) and the progressDialog shows again(a new thread), this previous thread will send a refreshFail, which should not happen.
-    private fun showProgressDialog(id: Int, type: Int) {
-        progressDialog.show()
-
-        // wait for 5s and send fail
-        MyApplication.getPools().execute {
-            Thread.sleep(5000)
-            when (type) {
-                0 -> {
-                    if (currRefresh == id) {
-                        handler.sendEmptyMessage(refreshFail)
-                    }
-                }
-                1 -> {
-                    if (currMore == id) {
-                        handler.sendEmptyMessage(refreshFail)
-                    }
-                }
-            }
-        }
-    }
 }
