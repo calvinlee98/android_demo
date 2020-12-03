@@ -1,8 +1,11 @@
 package com.example.android_demo_application.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.example.android_demo_application.activities.LogActivity;
+import com.example.android_demo_application.fragments.ShouyeBannerFragment;
 import com.example.android_demo_application.utities.ShouyeItem;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -16,6 +19,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import kotlin.Pair;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -29,6 +33,7 @@ public class HttpUtils {
     public static String REGISTER_URL = "https://www.wanandroid.com/user/register";
     public static String ARTICLES_LIST = "https://www.wanandroid.com/article/list/";
     public static String LOGOUT_URL = "https://www.wanandroid.com/user/logout/json";
+    public static String BANNER_URL = "https://www.wanandroid.com/banner/json";
 
 
     public static String FAVORITES_ARTICLES = "https://www.wanandroid.com/lg/collect/list/";//需要拼接  get方法
@@ -100,11 +105,54 @@ public class HttpUtils {
                        object.getString("superChapterName"),
                        object.getString("link")));
            }
-          return list;
+           return list;
        } catch (Exception e) {
            return new ArrayList<>();
        }
 
+   }
+
+   public static Pair<List<ShouyeItem>, List<ShouyeBannerFragment>> refresh() {
+      List<ShouyeItem> itemList = getLists(0);
+      List<ShouyeBannerFragment> bannerList = new ArrayList<>();
+      try {
+          OkHttpClient client = new OkHttpClient();
+
+          Request request = new Request.Builder().url(BANNER_URL).build();
+
+          Response response = client.newCall(request).execute();
+          String responseData = response.body().string();
+
+          JSONArray jsonArray = new JSONObject(responseData).getJSONArray("data");
+          for (int i = 0; i < jsonArray.length(); ++i) {
+              JSONObject jsonObject = jsonArray.getJSONObject(i);
+              String url = jsonObject.getString("imagePath");
+              Log.d("HttpUtils", url);
+              if (!url.equals("") && url != null) {
+                  Bitmap bitmap = getBitmap(url);
+                  if (bitmap != null) {
+                      bannerList.add(new ShouyeBannerFragment(bitmap));
+                  }
+              }
+          }
+          return new Pair<>(itemList, bannerList);
+      } catch (Exception e) {
+          return null;
+      }
+   }
+
+   private static Bitmap getBitmap(String url) {
+      OkHttpClient client = new OkHttpClient();
+
+      Request request = new Request.Builder().url(url).build();
+
+      try {
+          Response response = client.newCall(request).execute();
+          byte[] bytes = response.body().bytes();
+          return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+      } catch (Exception e) {
+          return null;
+      }
    }
 
    public static String logout(){

@@ -36,14 +36,10 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager, private val it
     } else {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.shouye_item_2, parent, false)
 
-        val imageButton = view.findViewById<ImageButton>(R.id.likeBtn)
-        imageButton.setOnClickListener({
-
-             AnimatorHelper.playFirstAnimator(imageButton)
-
-
-
-        })
+        val imageButton = view.likeBtn
+        imageButton.setOnClickListener {
+            AnimatorHelper.playFirstAnimator(imageButton)
+        }
 
         val holder = ItemViewHolder(view)
         holder.itemView.setOnClickListener {
