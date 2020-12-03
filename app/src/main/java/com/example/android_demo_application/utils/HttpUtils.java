@@ -75,8 +75,8 @@ public class HttpUtils {
 
        Request request = new Request.Builder().url(url).post(requestBody).build();
 
-       Response response = null;
-       String responseData = null;
+       Response response;
+       String responseData;
 
        try {
            response = okHttpClient.newCall(request).execute();
@@ -102,8 +102,8 @@ public class HttpUtils {
 
       Request request = new Request.Builder().url(url).build();
 
-      Response response = null;
-      String responseData = null;
+      Response response;
+      String responseData;
 
        try {
            response = client.newCall(request).execute();
@@ -178,8 +178,8 @@ public class HttpUtils {
       OkHttpClient client = new OkHttpClient();
       Request request = new Request.Builder().url(LOGOUT_URL).build();
 
-      Response response = null;
-      String responseData = null;
+      Response response;
+      String responseData;
 
       try{
       response = client.newCall(request).execute();
