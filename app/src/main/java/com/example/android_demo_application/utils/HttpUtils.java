@@ -17,7 +17,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import kotlin.Pair;
 import okhttp3.FormBody;
@@ -173,6 +175,43 @@ public class HttpUtils {
       }
    }
 
+   public static Set<String> getFavoritesList(){
+       OkHttpClient client = new OkHttpClient();
+       Request request;
+       Response response;
+       String responseData;
+       Set<String>result = new HashSet<>();
+
+       String cookieInfo = "loginUserName="+SharedPreferenceUtils.getSavedUserName()+";loginUserPassword="+SharedPreferenceUtils.getSavedPassword();
+
+       int page = 0;
+       while(true) {
+
+           request = new Request.Builder().url(FAVORITES_ARTICLES + page + "/json").header("Cookie", cookieInfo).build();
+
+           try{
+               response = client.newCall(request).execute();
+               responseData = response.body().string();
+
+               JSONObject jsonObject = new JSONObject(responseData);
+               JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+               JSONArray jsonArray = jsonObject1.getJSONArray("datas");
+               if(jsonArray.length()==0)
+                   break;
+               for(int i=0;i<jsonArray.length();++i){
+                   JSONObject object = jsonArray.getJSONObject(i);
+                   result.add(object.getString("originId"));
+               }
+               page++;
+           }
+           catch (Exception e){
+               return result;
+
+           }
+       }
+       return result;
+
+   }
    public static List<ShouyeItem> getFavorites(int page){
       OkHttpClient client = new OkHttpClient();
 

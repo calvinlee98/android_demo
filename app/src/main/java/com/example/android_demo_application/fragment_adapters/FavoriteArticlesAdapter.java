@@ -69,25 +69,22 @@ public class FavoriteArticlesAdapter extends RecyclerView.Adapter<FavoriteArticl
            type  = itemView.findViewById(R.id.typeText);
            button = itemView.findViewById(R.id.likeBtn);
 
-           button.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   AnimatorHelper.playFirstAnimator(button);
-                   //取消收藏的逻辑
-                   Log.d("TAG","开始取消收藏"+article_id);
-                   MyApplication.getPools().execute(new Runnable() {
-                       @Override
-                       public void run() {
-                           String s = HttpUtils.cancelLike(article_id);
-                           Log.d("TAG",s);
-                           List<ShouyeItem>list = HttpUtils.getFavorites(0);
-                           Message message = Message.obtain();
-                           message.setTarget(handler);
-                           message.obj = list;
-                           handler.sendMessage(message);
-                       }
-                   });
-               }
+           button.setOnClickListener(v -> {
+               AnimatorHelper.playFirstAnimator(button);
+               //取消收藏的逻辑
+               Log.d("TAG","开始取消收藏"+article_id);
+               MyApplication.getPools().execute(new Runnable() {
+                   @Override
+                   public void run() {
+                       String s = HttpUtils.cancelLike(article_id);
+                       Log.d("TAG",s);
+                       List<ShouyeItem>list = HttpUtils.getFavorites(0);
+                       Message message = Message.obtain();
+                       message.setTarget(handler);
+                       message.obj = list;
+                       handler.sendMessage(message);
+                   }
+               });
            });
         }
     }
