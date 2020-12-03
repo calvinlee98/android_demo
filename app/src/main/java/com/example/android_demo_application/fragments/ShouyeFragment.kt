@@ -156,6 +156,11 @@ class ShouyeFragment : Fragment() {
 
         // get first page
         MyApplication.getPools().execute {
+            val bMsg = Message()
+            bMsg.what = refreshFail
+            bMsg.obj = MessageObj(id, null)
+            handler.sendMessageDelayed(bMsg, 5000)
+
             val pair = HttpUtils.refresh()
             val msg = Message()
             if (pair != null) {
@@ -174,6 +179,11 @@ class ShouyeFragment : Fragment() {
 
         val id = moreId
         MyApplication.getPools().execute {
+            val bMsg = Message()
+            bMsg.what = moreFail
+            bMsg.obj = MessageObj(id, null)
+            handler.sendMessageDelayed(bMsg, 5000)
+
             val itemList = HttpUtils.getLists(nextPage)
             val msg = Message()
             if (itemList.isNotEmpty()) {
