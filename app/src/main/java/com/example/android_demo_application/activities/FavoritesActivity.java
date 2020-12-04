@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.android_demo_application.MyApplication;
 import com.example.android_demo_application.R;
@@ -20,10 +21,11 @@ import com.example.android_demo_application.utities.ShouyeItem;
 import java.util.List;
 
 
-public class FavoritesActivity extends AppCompatActivity {
+public class FavoritesActivity extends AppCompatActivity  {
     private int curr_page;
     RecyclerView recyclerView;
     FavoriteArticlesAdapter adapter;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +34,20 @@ public class FavoritesActivity extends AppCompatActivity {
          init();
     }
     private void init(){
+        swipeRefreshLayout = findViewById(R.id.swiperefreshlayout);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            MyApplication.getPools().execute(() -> {
+                curr_page=0;
+                List<ShouyeItem>list = HttpUtils.getFavorites(curr_page++);
+                Message message = Message.obtain();
+                message.obj = list;
+                message.setTarget(handler);
+                handler.sendMessage(message);
+
+            });
+            //zhu线程上
+            swipeRefreshLayout.setRefreshing(false);
+        });
         recyclerView = findViewById(R.id.rv);
         adapter = new FavoriteArticlesAdapter(handler);
         recyclerView.setAdapter(adapter);
@@ -46,7 +62,6 @@ public class FavoritesActivity extends AppCompatActivity {
             List<ShouyeItem>list  = (List<ShouyeItem>) msg.obj;
             adapter.list = list;
             adapter.notifyDataSetChanged();
-            Log.d("TAG",list.size()+"");
          //   adapter.notify();
         }
     };

@@ -4,18 +4,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.example.android_demo_application.activities.LogActivity;
+
 import com.example.android_demo_application.fragments.ShouyeBannerFragment;
 import com.example.android_demo_application.utities.ShouyeItem;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.StringReader;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -236,13 +235,12 @@ public class HttpUtils {
 
       Request request = new Request.Builder().url(FAVORITES_ARTICLES+page+"/json").header("Cookie",cookieInfo).build();
 
-      Response response = null;
-      String responseData = null;
+      Response response;
+      String responseData;
 
       try{
           response = client.newCall(request).execute();
           responseData = response.body().string();
-          Log.d("TAG",responseData);
 
           JSONObject jsonObject = new JSONObject(responseData);
           JSONObject jsonObject1 = jsonObject.getJSONObject("data");

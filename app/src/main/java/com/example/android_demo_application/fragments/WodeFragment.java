@@ -42,6 +42,7 @@ import com.example.android_demo_application.views.MyButton;
 
 
 public class WodeFragment extends Fragment implements View.OnClickListener {
+    private static String TAG = ".WodeFragment";
      Button button_logout;
     View view;
     Button button;
@@ -61,8 +62,6 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
         initView();
         return view;
     }
-
-
 
     void initView(){
         button = view.findViewById(R.id.qudenglu);
@@ -125,10 +124,7 @@ public class WodeFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+
 
     @Override
     public void onResume() {
