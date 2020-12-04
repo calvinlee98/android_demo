@@ -46,9 +46,11 @@ class ShouyeFragment : Fragment() {
     // variables
     private val _itemList = ArrayList<ShouyeItem>()
     private val _bannerList = ArrayList<ShouyeBannerFragment>()
+    private val _favoriteSet = HashSet<String>()
 
-    // message obj
-    inner class MessageObj (val id: Int, val obj: Any?)
+    // inner object for message
+    inner class MessageObj(val id: Int, val obj: Any?)
+    inner class RefreshObj(val itemList: List<ShouyeItem>, val bannerList: List<ShouyeBannerFragment>, val favoriteSet: Set<String>)
 
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
@@ -66,9 +68,10 @@ class ShouyeFragment : Fragment() {
                         _bannerList.clear()
                         nextPage = 1
 
-                        val pair = messageObj.obj as Pair<List<ShouyeItem>, List<ShouyeBannerFragment>>
-                        _itemList.addAll(pair.first)
-                        _bannerList.addAll(pair.second)
+                        val refreshObj = messageObj.obj as RefreshObj
+                        _itemList.addAll(refreshObj.itemList)
+                        _bannerList.addAll(refreshObj.bannerList)
+                        _favoriteSet.addAll(refreshObj.favoriteSet)
 
                         if (recyclerView.childCount > 0) {
                             recyclerView.removeAllViews()
@@ -141,12 +144,11 @@ class ShouyeFragment : Fragment() {
             Toast.makeText(activity, "Back", Toast.LENGTH_SHORT).show()
         }
 
-        setRecyclerView(_itemList, _bannerList)
+        setRecyclerView(_itemList, _bannerList, _favoriteSet)
         progressDialog.apply {
             setMessage("loading...")
             setCancelable(false)
         }
-
         refresh()
     }
 
@@ -162,9 +164,10 @@ class ShouyeFragment : Fragment() {
             handler.sendMessageDelayed(bMsg, 5000)
 
             val pair = HttpUtils.refresh()
+            val favoriteSet = HttpUtils.getFavoritesList()
             val msg = Message()
             if (pair != null) {
-                msg.obj = MessageObj(id, pair)
+                msg.obj = MessageObj(id, RefreshObj(pair.first, pair.second, favoriteSet))
                 msg.what = refreshSuccess
             } else {
                 msg.obj = MessageObj(id, null)
@@ -197,10 +200,10 @@ class ShouyeFragment : Fragment() {
         }
     }
 
-    private fun setRecyclerView(itemList: List<ShouyeItem>, bannerList: List<ShouyeBannerFragment>) {
+    private fun setRecyclerView(itemList: List<ShouyeItem>, bannerList: List<ShouyeBannerFragment>, favoriteSet: Set<String>) {
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
-        val adapter = ShouyeAdapter(childFragmentManager, itemList, bannerList)
+        val adapter = ShouyeAdapter(childFragmentManager, itemList, bannerList, favoriteSet)
         recyclerView.adapter = adapter
     }
 
