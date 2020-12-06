@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.ShouyeAdapter
@@ -129,6 +130,22 @@ class ShouyeFragment : Fragment() {
     }
 
     private fun init() {
+
+        val swipeRefreshLayout = fragmentView.findViewById<SwipeRefreshLayout>(R.id.swiperefreshlayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            //更新逻辑
+            MyApplication.pools.execute(Runnable {
+                var list = HttpUtils.getLists(nextPage++);
+                val message = Message.obtain()
+                message.target = newHandler
+                message.obj  = list
+                handler.sendMessage(message)
+
+            })
+            swipeRefreshLayout.isRefreshing = false
+
+        }
+
         fragmentView.titleBar.refreshBtn.setOnClickListener {
             refresh()
         }
@@ -149,13 +166,19 @@ class ShouyeFragment : Fragment() {
 
         refresh()
     }
+    val newHandler = object :Handler(){
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            val list = msg.obj
 
+        }
+    }
     private fun refresh() {
         progressDialog.show()
         val id = refreshId
 
         // get first page
-        MyApplication.getPools().execute {
+        MyApplication.pools.execute {
             val pair = HttpUtils.refresh()
             val msg = Message()
             if (pair != null) {
@@ -173,7 +196,7 @@ class ShouyeFragment : Fragment() {
         progressDialog.show()
 
         val id = moreId
-        MyApplication.getPools().execute {
+        MyApplication.pools.execute {
             val itemList = HttpUtils.getLists(nextPage)
             val msg = Message()
             if (itemList.isNotEmpty()) {

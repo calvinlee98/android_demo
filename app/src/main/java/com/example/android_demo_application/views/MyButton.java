@@ -18,6 +18,7 @@ public class MyButton extends FrameLayout {
     ImageButton imageButton1;
     Button button;
     ImageButton imageButton2;
+
     public MyButton(Context context) {
         super(context);
     }

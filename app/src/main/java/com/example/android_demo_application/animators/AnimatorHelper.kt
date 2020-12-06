@@ -1,0 +1,56 @@
+package com.example.android_demo_application.animators
+
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import com.example.android_demo_application.R
+import com.example.android_demo_application.utities.ShouyeItem
+
+object AnimatorHelper {
+    fun playSecondAnimator(view: View) {
+        var animator1 =
+            ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 0.0f).setDuration(500)
+        var animator2 =
+            ObjectAnimator.ofFloat(view, "scaleY", 1.0f, 0.0f).setDuration(500)
+        var animatorSet = AnimatorSet()
+        animatorSet.play(animator1).with(animator2)
+        animatorSet.start()
+        view.setBackgroundResource(R.drawable.hard_heart)
+        animator1 = ObjectAnimator.ofFloat(view, "scaleX", 0.0f, 1.0f).setDuration(500)
+        animator2 = ObjectAnimator.ofFloat(view, "scaleY", 0.0f, 1.0f).setDuration(500)
+        animatorSet = AnimatorSet()
+        animatorSet.play(animator1).with(animator2)
+        animatorSet.start()
+    }
+
+    fun playFirstAnimator(
+        view: View,
+        adapter: RecyclerView.Adapter<*>,
+        list: ArrayList<ShouyeItem?>,
+        position: Int
+    ) {
+        val animator = ValueAnimator.ofFloat(1.0f, 0.0f)
+        animator.duration = 500
+        animator.addUpdateListener { animation: ValueAnimator ->
+            val `val` = animation.animatedValue as Float
+            view.alpha = `val`
+            if (`val` == 0.0f) view.setBackgroundResource(R.drawable.empty_heart)
+        }
+        val animator1 = ValueAnimator.ofFloat(0.0f, 1.0f)
+        animator1.duration = 500
+        animator1.addUpdateListener { animation: ValueAnimator ->
+            val `val` = animation.animatedValue as Float
+            view.alpha = `val`
+            if (`val` == 1.0f) {
+                list.removeAt(position)
+                adapter.notifyItemRemoved(position)
+                adapter.notifyDataSetChanged()
+            }
+        }
+        val set = AnimatorSet()
+        set.play(animator1).after(animator)
+        set.start()
+    }
+}
