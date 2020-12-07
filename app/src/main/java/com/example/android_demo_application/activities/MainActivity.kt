@@ -36,9 +36,9 @@ class MainActivity : AppCompatActivity() {
         val adapter = MainActivityAdapter(supportFragmentManager, list)
 
         //pager
-        pager!!.setAdapter(adapter)
-        pager!!.setOffscreenPageLimit(3)
-        tabLayout!!.setupWithViewPager(pager)
+        pager?.adapter = adapter
+        pager?.offscreenPageLimit = 3
+        tabLayout?.setupWithViewPager(pager)
         initTab()
     }
 
