@@ -18,8 +18,13 @@ import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.ShouyeAdapter
 import com.example.android_demo_application.utils.HttpUtils
 import com.example.android_demo_application.utities.ShouyeItem
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
 import kotlinx.android.synthetic.main.shouye.view.*
 import kotlinx.android.synthetic.main.title_bar.view.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 
 class ShouyeFragment : Fragment() {
@@ -138,11 +143,8 @@ class ShouyeFragment : Fragment() {
         val swipeRefreshLayout = fragmentView.swiperefreshlayout
         swipeRefreshLayout.setOnRefreshListener {
             //更新逻辑
-
             swipeRefreshLayout.isRefreshing = false
-
         }
-
         fragmentView.titleBar.refreshBtn.setOnClickListener {
             refresh()
         }

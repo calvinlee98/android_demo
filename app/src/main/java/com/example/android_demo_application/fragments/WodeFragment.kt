@@ -1,6 +1,5 @@
 package com.example.android_demo_application.fragments
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -73,9 +72,9 @@ import java.lang.ref.WeakReference
         wodeshoucang?.setOnClickListener { v: View -> onClick(v) }
         shaohouyuedu?.setOnClickListener { v: View -> onClick(v) }
         yuedulishi?.setOnClickListener { v: View -> onClick(v) }
-        kaiyuanxiangmu?.setOnClickListener({ v: View -> onClick(v) })
-        guanyuzuozhe?.setOnClickListener({ v: View -> onClick(v) })
-        xitongshezhi?.setOnClickListener({ v: View -> onClick(v) })
+        kaiyuanxiangmu?.setOnClickListener { v: View -> onClick(v) }
+        guanyuzuozhe?.setOnClickListener { v: View -> onClick(v) }
+        xitongshezhi?.setOnClickListener { v: View -> onClick(v) }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -102,10 +101,10 @@ import java.lang.ref.WeakReference
         }
     }
 
-    var handler: Handler = MyHandler(this)
+    var handler: Handler = MyHandler()
 
-    class MyHandler(fragment: WodeFragment?) : Handler() {
-        private val mFragment: WeakReference<WodeFragment>
+    class MyHandler : Handler() {
+        private lateinit var  mFragment: WeakReference<WodeFragment>
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             val s = msg.obj as String
@@ -124,9 +123,6 @@ import java.lang.ref.WeakReference
             }
         }
 
-        init {
-            mFragment = WeakReference<WodeFragment>(fragment)
-        }
     }
 
     override fun onClick(v: View) {
