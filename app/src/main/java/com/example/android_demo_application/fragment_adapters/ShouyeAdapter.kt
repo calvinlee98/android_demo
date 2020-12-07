@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_demo_application.R
+import com.example.android_demo_application.activities.DetailActivity
 import com.example.android_demo_application.animators.AnimatorHelper
 import com.example.android_demo_application.fragments.ShouyeBannerFragment
 import com.example.android_demo_application.utities.ShouyeItem
@@ -43,11 +45,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
            // AnimatorHelper.playFirstAnimator(imageButton)
         }
 
-        val holder = ItemViewHolder(view)
-        holder.itemView.setOnClickListener {
-            Toast.makeText(parent.context, "Clicked!", Toast.LENGTH_SHORT).show()
-        }
-        holder
+        ItemViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -62,6 +60,11 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
                 titleText.text = itemList[position-1].title
                 contentText.text = itemList[position-1].content
                 typeText.text = itemList[position-1].superChapterName
+                setOnClickListener {
+                    val intent = Intent(context, DetailActivity::class.java)
+                    intent.putExtra("url", itemList[position-1].link)
+                    context.startActivity(intent)
+                }
             }
             // TODO: favorite list
             if (favoriteSet.contains(itemList[position-1].articleId)) {
