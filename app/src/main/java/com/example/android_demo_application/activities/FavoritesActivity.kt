@@ -16,7 +16,8 @@ import com.example.android_demo_application.utils.HttpUtils
 import com.example.android_demo_application.utities.ShouyeItem
 import java.lang.ref.WeakReference
 
-class FavoritesActivity : AppCompatActivity() {
+class FavoritesActivity : AppCompatActivity(),FavoritesView {
+    var presenter : FavoritesPresenter? = null
     private var curr_page = 0
     var recyclerView: RecyclerView? = null
     var adapter: FavoriteArticlesAdapter? = null
@@ -27,30 +28,22 @@ class FavoritesActivity : AppCompatActivity() {
         setContentView(R.layout.favorites)
         init()
         curr_page = 0
-        MyApplication.pools.execute {
-            val list = HttpUtils.getFavorites(curr_page++)
-            val message = Message.obtain()
-            message.obj = list
-            message.target = handler
-            handler.sendMessage(message)
-        }
+        presenter?.getFirstUIData(curr_page)
     }
 
     private fun init() {
+        presenter = FavoritesPresenter()
+        presenter!!.attachView(this)
         swipeRefreshLayout = findViewById(R.id.swiperefreshlayout)
-        swipeRefreshLayout?.setOnRefreshListener(OnRefreshListener {
-            MyApplication.pools.execute {
-                curr_page = 0
-                val list = HttpUtils.getFavorites(curr_page++)
-                val message = Message.obtain()
-                message.obj = list
-                message.target = handler
-                handler.sendMessage(message)
-            }
+        swipeRefreshLayout?.setOnRefreshListener {
+            //上滑刷新
+            curr_page = 0
+           presenter?.getFirstUIData(curr_page)
             //zhu线程上
-            swipeRefreshLayout?.setRefreshing(false)
-        })
+            swipeRefreshLayout?.isRefreshing = false
+        }
         recyclerView = findViewById(R.id.rv)
+        //加载更多的listener
         recyclerView?.setOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 val layoutManager = recyclerView.layoutManager
@@ -59,59 +52,57 @@ class FavoritesActivity : AppCompatActivity() {
                 }
                 if (adapter != null) {
                     if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItemPosition + 1 == adapter!!.itemCount) {
-                        Log.v(".RecyclerView.Adapter", "尝试加载更多")
-                        MyApplication.pools.execute(Runnable {
-                            Log.v(".RecyclerView", "当前尝试加载$curr_page")
-                            val list = HttpUtils.getFavorites(curr_page)
-                            if (list.size == 0) {
-                                return@Runnable
-                            }
-                            curr_page++
-                            val message = Message.obtain()
-                            message.target = addMoreHandler
-                            message.obj = list
-                            addMoreHandler.sendMessage(message)
-                        })
+                       presenter?.getMoreUIData(curr_page)
                     }
                 }
             }
         })
-        adapter = FavoriteArticlesAdapter(handler)
-        recyclerView?.setAdapter(adapter)
-        recyclerView?.setLayoutManager(LinearLayoutManager(this))
+        adapter = FavoriteArticlesAdapter()
+        recyclerView?.adapter = adapter
+        recyclerView?.layoutManager = LinearLayoutManager(this)
     }
 
-    internal class MyHandler(activity: FavoritesActivity?) : Handler() {
-        var weakReference: WeakReference<FavoritesActivity?>
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            if (weakReference.get() != null) {
-                weakReference.get()!!.adapter!!.list = msg.obj as ArrayList<ShouyeItem?>
-                weakReference.get()!!.adapter!!.notifyDataSetChanged()
-            }
-        }
+//    internal class MyHandler(activity: FavoritesActivity?) : Handler() {
+//        var weakReference: WeakReference<FavoritesActivity?> = WeakReference(activity)
+//        override fun handleMessage(msg: Message) {
+//            super.handleMessage(msg)
+//            if (weakReference.get() != null) {
+//                weakReference.get()!!.adapter!!.list = msg.obj as ArrayList<ShouyeItem?>
+//                weakReference.get()!!.adapter!!.notifyDataSetChanged()
+//            }
+//        }
+//
+//    }
 
-        init {
-            weakReference = WeakReference(activity)
-        }
+//    var handler: Handler = MyHandler(this)
+//    var addMoreHandler: Handler = AddMoreHandler(this)
+
+//    internal class AddMoreHandler(activity: FavoritesActivity?) : Handler() {
+//        var mActivity: WeakReference<FavoritesActivity?> = WeakReference(activity)
+//        override fun handleMessage(msg: Message) {
+//            super.handleMessage(msg)
+//            if (mActivity.get() != null) {
+//                val list = msg.obj as List<ShouyeItem>
+//                for (item in list) mActivity.get()!!.adapter!!.list.add(item)
+//                mActivity.get()!!.adapter!!.notifyDataSetChanged()
+//            }
+//        }
+//
+//    }
+
+    override fun initRecyclerView(list: MutableList<ShouyeItem>) {
+        adapter?.list = list
+        adapter?.notifyDataSetChanged()
+        curr_page++
     }
 
-    var handler: Handler = MyHandler(this)
-    var addMoreHandler: Handler = AddMoreHandler(this)
-
-    internal class AddMoreHandler(activity: FavoritesActivity?) : Handler() {
-        var mActivity: WeakReference<FavoritesActivity?>
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            if (mActivity.get() != null) {
-                val list = msg.obj as List<ShouyeItem>
-                for (item in list) mActivity.get()!!.adapter!!.list.add(item)
-                mActivity.get()!!.adapter!!.notifyDataSetChanged()
-            }
+    override fun addMoreViewsToRecyclerView(list: MutableList<ShouyeItem>) {
+        if(list.size == 0){
+            return
         }
-
-        init {
-            mActivity = WeakReference(activity)
-        }
+        for(item in list)
+            adapter?.list?.add(item)
+        adapter?.notifyDataSetChanged()
+        curr_page++
     }
 }
