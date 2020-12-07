@@ -73,23 +73,24 @@ object HttpUtils {
         return try {
             response = okHttpClient.newCall(request!!).execute()
             responseData = response!!.body!!.string()
-            val jsonObject = JSONObject(responseData)
+            val jsonObject = JSONObject(responseData!!)
             val jsonObject1 = jsonObject.getJSONObject("data")
             val jsonArray = jsonObject1.getJSONArray("datas")
             val list: MutableList<ShouyeItem> = ArrayList()
             for (i in 0 until jsonArray.length()) {
-                val `object` = jsonArray.getJSONObject(i)
+                val jsonObject3 = jsonArray.getJSONObject(i)
                 list.add(ShouyeItem(
-                        `object`.getString("id"),
-                        `object`.getString("author"),
-                        `object`.getString("publishTime"),
-                        `object`.getString("title"),
+                        jsonObject3.getString("id"),
+                        jsonObject3.getString("author"),
+                        jsonObject3.getString("publishTime"),
+                        jsonObject3.getString("title"),
                         "",
-                        `object`.getString("superChapterName"),
-                        `object`.getString("link")))
+                        jsonObject3.getString("superChapterName"),
+                        jsonObject3.getString("link")))
             }
             list
         } catch (e: Exception) {
+            e.printStackTrace()
             ArrayList()
         }
     }
@@ -105,8 +106,7 @@ object HttpUtils {
             for (i in 0 until jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(i)
                 val url = jsonObject.getString("imagePath")
-                Log.d("HttpUtils", url)
-                if (url != "" && url != null) {
+                if (url.isNotEmpty()) {
                     val bitmap = getBitmap(url)
                     if (bitmap != null) {
                         bannerList.add(ShouyeBannerFragment(bitmap))

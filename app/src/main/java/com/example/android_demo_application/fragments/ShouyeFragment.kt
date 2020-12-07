@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -134,7 +135,7 @@ class ShouyeFragment : Fragment() {
 
     private fun init() {
 
-        val swipeRefreshLayout = fragmentView.findViewById<SwipeRefreshLayout>(R.id.swiperefreshlayout)
+        val swipeRefreshLayout = fragmentView.swiperefreshlayout
         swipeRefreshLayout.setOnRefreshListener {
             //更新逻辑
 
@@ -167,18 +168,16 @@ class ShouyeFragment : Fragment() {
         val id = refreshId
 
         // get first page
-<<<<<<< HEAD
-        MyApplication.getPools().execute {
+        MyApplication.pools.execute {
             val bMsg = Message()
             bMsg.what = refreshFail
             bMsg.obj = MessageObj(id, null)
             handler.sendMessageDelayed(bMsg, 5000)
+        }
 
-=======
         MyApplication.pools.execute {
->>>>>>> 90833d3a938e43a2e9593479bebae2cace9e6d8a
             val pair = HttpUtils.refresh()
-            val favoriteSet = HttpUtils.getFavoritesList()
+            val favoriteSet = HttpUtils.favoritesList
             val msg = Message()
             if (pair != null) {
                 msg.obj = MessageObj(id, RefreshObj(pair.first, pair.second, favoriteSet))
@@ -195,16 +194,14 @@ class ShouyeFragment : Fragment() {
         progressDialog.show()
 
         val id = moreId
-<<<<<<< HEAD
-        MyApplication.getPools().execute {
+        MyApplication.pools.execute {
             val bMsg = Message()
             bMsg.what = moreFail
             bMsg.obj = MessageObj(id, null)
             handler.sendMessageDelayed(bMsg, 5000)
+        }
 
-=======
         MyApplication.pools.execute {
->>>>>>> 90833d3a938e43a2e9593479bebae2cace9e6d8a
             val itemList = HttpUtils.getLists(nextPage)
             val msg = Message()
             if (itemList.isNotEmpty()) {
@@ -226,7 +223,6 @@ class ShouyeFragment : Fragment() {
     }
 
     private fun notifyRecyclerView(position: Int) {
-//        recyclerView.adapter?.notifyItemInserted(position)
         recyclerView.adapter?.notifyDataSetChanged()
         val layoutManager = recyclerView.layoutManager as LinearLayoutManager
         layoutManager.scrollToPosition(position)
