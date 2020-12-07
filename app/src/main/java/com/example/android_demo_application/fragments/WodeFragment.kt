@@ -166,7 +166,5 @@ import java.lang.ref.WeakReference
         }
     }
 
-    companion object {
-        private const val TAG = ".WodeFragment"
-    }
+
 }
