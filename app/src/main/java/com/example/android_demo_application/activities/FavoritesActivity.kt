@@ -61,34 +61,6 @@ class FavoritesActivity : AppCompatActivity(),FavoritesView {
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-//    internal class MyHandler(activity: FavoritesActivity?) : Handler() {
-//        var weakReference: WeakReference<FavoritesActivity?> = WeakReference(activity)
-//        override fun handleMessage(msg: Message) {
-//            super.handleMessage(msg)
-//            if (weakReference.get() != null) {
-//                weakReference.get()!!.adapter!!.list = msg.obj as ArrayList<ShouyeItem?>
-//                weakReference.get()!!.adapter!!.notifyDataSetChanged()
-//            }
-//        }
-//
-//    }
-
-//    var handler: Handler = MyHandler(this)
-//    var addMoreHandler: Handler = AddMoreHandler(this)
-
-//    internal class AddMoreHandler(activity: FavoritesActivity?) : Handler() {
-//        var mActivity: WeakReference<FavoritesActivity?> = WeakReference(activity)
-//        override fun handleMessage(msg: Message) {
-//            super.handleMessage(msg)
-//            if (mActivity.get() != null) {
-//                val list = msg.obj as List<ShouyeItem>
-//                for (item in list) mActivity.get()!!.adapter!!.list.add(item)
-//                mActivity.get()!!.adapter!!.notifyDataSetChanged()
-//            }
-//        }
-//
-//    }
-
     override fun initRecyclerView(list: MutableList<ShouyeItem>) {
         adapter.list = list
         adapter.notifyDataSetChanged()

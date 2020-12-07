@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,9 +21,10 @@ import com.example.android_demo_application.utities.ShouyeItem
 import kotlinx.android.synthetic.main.shouye_item_1.view.*
 import kotlinx.android.synthetic.main.shouye_item_2.view.*
 
-class ShouyeAdapter(private val fragmentManager: FragmentManager, private val itemList: List<ShouyeItem>, private val fragmentList: List<ShouyeBannerFragment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-
+class ShouyeAdapter(private val fragmentManager: FragmentManager,
+                    private val itemList: List<ShouyeItem>,
+                    private val fragmentList: List<ShouyeBannerFragment>,
+                    private val favoriteSet: Set<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
 
@@ -60,6 +62,10 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager, private val it
                 titleText.text = itemList[position-1].title
                 contentText.text = itemList[position-1].content
                 typeText.text = itemList[position-1].superChapterName
+            }
+            // TODO: favorite list
+            if (favoriteSet.contains(itemList[position-1].articleId)) {
+                Log.d("favorite", "${itemList[position-1].articleId}")
             }
         }
     }
