@@ -67,6 +67,7 @@ class ShouyeFragment : Fragment() {
     }
     inner class FavoriteChangeReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
+            // 根据消息内容更改favoriteSet，并且刷新recyclerView
             val flag = intent.getStringExtra("flag")
             val articleId = intent.getStringExtra("articleId")
             if (articleId != null) {
@@ -94,8 +95,10 @@ class ShouyeFragment : Fragment() {
                             progressDialog.dismiss()
                         }
 
+                        // 清空并重设数据集，初始化nextPage变量
                         _itemList.clear()
                         _bannerList.clear()
+                        _favoriteSet.clear()
                         nextPage = 1
 
                         val refreshObj = messageObj.obj as RefreshObj
@@ -103,6 +106,7 @@ class ShouyeFragment : Fragment() {
                         _bannerList.addAll(refreshObj.bannerList)
                         _favoriteSet.addAll(refreshObj.favoriteSet)
 
+                        // 清空并重设recycler view
                         if (recyclerView.childCount > 0) {
                             recyclerView.removeAllViews()
                         }
@@ -117,6 +121,17 @@ class ShouyeFragment : Fragment() {
                         if (progressDialog.isShowing) {
                             progressDialog.dismiss()
                         }
+
+                        _itemList.clear()
+                        _bannerList.clear()
+                        _favoriteSet.clear()
+                        nextPage = 1
+
+                        if (recyclerView.childCount > 0) {
+                            recyclerView.removeAllViews()
+                        }
+                        recyclerView.adapter?.notifyDataSetChanged()
+
                         Toast.makeText(activity, "refresh fail", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -184,24 +199,28 @@ class ShouyeFragment : Fragment() {
             Toast.makeText(activity, "Back", Toast.LENGTH_SHORT).show()
         }
 
+        // 初始化recycler view
         setRecyclerView(_itemList, _bannerList, _favoriteSet)
+        // 初始化progress dialog
         progressDialog.apply {
             setMessage("loading...")
             setCancelable(false)
         }
-
+        // 注册broadcast receiver
         val intentFilter = IntentFilter()
         intentFilter.addAction(favoriteIntentFilterAction)
         activity?.registerReceiver(favoriteChangeReceiver, intentFilter)
 
+        // 初始刷新 获取itemList, bannerList, favoriteSet数据
         refresh()
     }
 
     private fun refresh() {
         progressDialog.show()
+        // 本次刷新的id
         val id = refreshId
 
-        // get first page
+        // 定时5s后发送失败消息
         MyApplication.pools.execute {
             val bMsg = Message()
             bMsg.what = refreshFail
@@ -209,6 +228,7 @@ class ShouyeFragment : Fragment() {
             handler.sendMessageDelayed(bMsg, 5000)
         }
 
+        // 从服务器获取itemList, bannerList, favoriteSet
         MyApplication.pools.execute {
             val pair = HttpUtils.refresh()
             val favoriteSet = HttpUtils.favoritesList
@@ -226,8 +246,10 @@ class ShouyeFragment : Fragment() {
 
     private fun more() {
         progressDialog.show()
-
+        // 本次获取更多的id
         val id = moreId
+
+        // 定时5s发送失败消息
         MyApplication.pools.execute {
             val bMsg = Message()
             bMsg.what = moreFail
@@ -235,6 +257,7 @@ class ShouyeFragment : Fragment() {
             handler.sendMessageDelayed(bMsg, 5000)
         }
 
+        // 从服务器获取下一页数据
         MyApplication.pools.execute {
             val itemList = HttpUtils.getLists(nextPage)
             val msg = Message()

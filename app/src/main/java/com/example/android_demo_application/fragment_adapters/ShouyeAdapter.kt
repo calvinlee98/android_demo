@@ -17,13 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.activities.DetailActivity
-import com.example.android_demo_application.animators.AnimatorHelper
 import com.example.android_demo_application.animators.MyButtonAnimatorHelper
 import com.example.android_demo_application.fragments.ShouyeBannerFragment
 import com.example.android_demo_application.entities.ShouyeItem
 import com.example.android_demo_application.utils.HttpUtils
 import kotlinx.android.synthetic.main.shouye_item_1.view.*
 import kotlinx.android.synthetic.main.shouye_item_2.view.*
+import java.text.SimpleDateFormat
 
 class ShouyeAdapter(private val fragmentManager: FragmentManager,
                     private val itemList: List<ShouyeItem>,
@@ -41,6 +41,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
+                // 因为favoriteSet已经在发送时修改过了，所以handler中只用处理ui逻辑
                 addFavoriteSuccess -> {
                     val btn = msg.obj as ImageButton
                     MyButtonAnimatorHelper.addToFavorite(btn)
@@ -76,40 +77,47 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is BannerViewHolder) {
-            // TODO: when there is no banner pics
             val adapter = ShouyeBannerAdapter(fragmentManager, fragmentList)
             holder.itemView.bannerViewPager.adapter = adapter
         } else {
             val currItem = itemList[position-1]
             holder.itemView.apply {
                 authorText.text = currItem.author
-                publishTimeText.text = currItem.publishTime
+//                publishTimeText.text = currItem.publishTime
+                // TODO: 时间和文章内的时间不一致
+                publishTimeText.text = SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(currItem.publishTime!!.toLong())
                 titleText.text = currItem.title
                 contentText.text = currItem.content
                 typeText.text = currItem.superChapterName
                 setOnClickListener {
+                    // 点击打开详情页，将相关信息发送到detail activity
                     val intent = Intent(context, DetailActivity::class.java)
                     val flag = favoriteSet.contains(currItem.articleId)
                     intent.putExtra("url", currItem.link)
-                    intent.putExtra("flag", flag)
+                    intent.putExtra("flag", flag) // 用来标记文章收藏与否
                     intent.putExtra("articleId", currItem.articleId)
                     context.startActivity(intent)
                 }
             }
-            // TODO: favorite list
+
+            // 设置收藏图标初始图案
             if (favoriteSet.contains(currItem.articleId)) {
                 holder.itemView.likeBtn.setImageResource(R.drawable.hard_heart)
             }
+
             holder.itemView.likeBtn.setOnClickListener {
                 if (currItem.articleId != null) {
+                    // 按钮防抖
                     it.isClickable = false
+
                     val message = Message()
                     message.obj = holder.itemView.likeBtn
                     if (favoriteSet.contains(currItem.articleId)) {
+                        // 发送添加/移除收藏请求，并根据接口的返回值交由handler处理后续逻辑
                         MyApplication.pools.execute {
                             val ret = HttpUtils.cancelLike(currItem.articleId)
                             if (ret == "success") {
-                                favoriteSet.remove(currItem.articleId)
+                                favoriteSet.remove(currItem.articleId) // 在这里处理favoriteSet是因为将articleId用message发送到handler显得有点麻烦
                                 message.what = removeFavoriteSuccess
                             } else {
                                 message.what = removeFavoriteFail
@@ -126,7 +134,6 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
                             } else {
                                 message.what = addFavoriteFail
                             }
-
                             handler.sendMessage(message)
                             it.isClickable = true
                         }

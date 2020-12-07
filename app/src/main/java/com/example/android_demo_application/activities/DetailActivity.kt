@@ -30,9 +30,9 @@ class DetailActivity : AppCompatActivity() {
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
+                // 添加/移除成功后处理ui逻辑以及发送广播
                 addFavoriteSuccess -> {
                     val btn = msg.obj as FloatingActionButton
-//                    btn.setImageResource(R.drawable.hard_heart)
                     MyButtonAnimatorHelper.addToFavorite(btn)
                     sendFavoriteBroadCast("add")
                 }
@@ -66,7 +66,9 @@ class DetailActivity : AppCompatActivity() {
         }
 
         likeFloatingBtn.setOnClickListener {
+            // 防抖
             it.isClickable = false
+
             val message = Message()
             message.obj = likeFloatingBtn
             if (flag) {
@@ -74,7 +76,7 @@ class DetailActivity : AppCompatActivity() {
                     val ret = HttpUtils.cancelLike(articleId)
                     if (ret == "success") {
                         message.what = removeFavoriteSuccess
-                        flag = !flag
+                        flag = !flag // 请求成功，修改flag状态
                     } else {
                         message.what = removeFavoriteFail
                     }
