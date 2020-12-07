@@ -1,12 +1,11 @@
 package com.example.android_demo_application.animators
 
 import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_demo_application.R
-import com.example.android_demo_application.utities.ShouyeItem
+import com.example.android_demo_application.entities.ShouyeItem
 
 object AnimatorHelper {
     fun playSecondAnimator(view: View) {

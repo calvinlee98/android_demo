@@ -1,4 +1,4 @@
-package com.example.android_demo_application.utities
+package com.example.android_demo_application.entities
 
 class ShouyeItem(val articleId:String?,
         val author: String?,

@@ -1,9 +1,8 @@
 package com.example.android_demo_application.activities
 
 import com.example.android_demo_application.utils.HttpUtils
-import com.example.android_demo_application.utities.ShouyeItem
+import com.example.android_demo_application.entities.ShouyeItem
 import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

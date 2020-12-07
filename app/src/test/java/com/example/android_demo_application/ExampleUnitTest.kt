@@ -1,7 +1,7 @@
 package com.example.android_demo_application
 
 import com.example.android_demo_application.utils.HttpUtils
-import com.example.android_demo_application.utities.ShouyeItem
+import com.example.android_demo_application.entities.ShouyeItem
 import org.junit.Test
 
 import org.junit.Assert.*

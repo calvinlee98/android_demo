@@ -1,10 +1,9 @@
 package com.example.android_demo_application.fragment_adapters
 
-import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.app.Activity
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,22 +14,53 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.activities.DetailActivity
-import com.example.android_demo_application.animators.AnimatorHelper
 import com.example.android_demo_application.fragments.ShouyeBannerFragment
-import com.example.android_demo_application.utities.ShouyeItem
+import com.example.android_demo_application.entities.ShouyeItem
+import com.example.android_demo_application.utils.HttpUtils
 import kotlinx.android.synthetic.main.shouye_item_1.view.*
 import kotlinx.android.synthetic.main.shouye_item_2.view.*
 
 class ShouyeAdapter(private val fragmentManager: FragmentManager,
                     private val itemList: List<ShouyeItem>,
                     private val fragmentList: List<ShouyeBannerFragment>,
-                    private val favoriteSet: Set<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+                    private val favoriteSet: MutableSet<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
 
     inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
+
+    private val addFavoriteSuccess = 0
+    private val addFavoriteFail = 1
+    private val removeFavoriteSuccess = 2
+    private val removeFavoriteFail = 3
+    private val handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                addFavoriteSuccess -> {
+                    val btn = msg.obj as ImageButton
+                    btn.setImageResource(R.drawable.hard_heart)
+                }
+
+                addFavoriteFail -> {
+                    val btn = msg.obj as ImageButton
+                    Toast.makeText(btn.context, "add favorite fail", Toast.LENGTH_SHORT).show()
+                }
+
+                removeFavoriteSuccess -> {
+                    val btn = msg.obj as ImageButton
+                    btn.setImageResource(R.drawable.empty_heart)
+                }
+
+                removeFavoriteFail -> {
+                    val btn = msg.obj as ImageButton
+                    Toast.makeText(btn.context, "remove favorite fail", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     override fun getItemViewType(position: Int) = if (position == 0) 0 else 1
 
@@ -69,17 +99,37 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
                 holder.itemView.likeBtn.setImageResource(R.drawable.hard_heart)
             }
             holder.itemView.likeBtn.setOnClickListener {
-                val intent = Intent("com.example.android_demo.favorite")
-                intent.putExtra("articleId", currItem.articleId)
-                if (favoriteSet.contains(currItem.articleId)) {
-                    holder.itemView.likeBtn.setImageResource(R.drawable.empty_heart) // change to animation
-                    intent.putExtra("flag", false)
-                } else {
-                    holder.itemView.likeBtn.setImageResource(R.drawable.hard_heart) // change to animation
-                    intent.putExtra("flag", true)
+                if (currItem.articleId != null) {
+                    it.isClickable = false
+                    val message = Message()
+                    message.obj = holder.itemView.likeBtn
+                    if (favoriteSet.contains(currItem.articleId)) {
+                        MyApplication.pools.execute {
+                            val ret = HttpUtils.cancelLike(currItem.articleId)
+                            if (ret == "success") {
+                                favoriteSet.remove(currItem.articleId)
+                                message.what = removeFavoriteSuccess
+                            } else {
+                                message.what = removeFavoriteFail
+                            }
+                            handler.sendMessage(message)
+                            it.isClickable = true
+                        }
+                    } else {
+                        MyApplication.pools.execute {
+                            val ret = HttpUtils.likeArticle(currItem.articleId)
+                            if (ret == "success") {
+                                favoriteSet.add(currItem.articleId)
+                                message.what = addFavoriteSuccess
+                            } else {
+                                message.what = addFavoriteFail
+                            }
+
+                            handler.sendMessage(message)
+                            it.isClickable = true
+                        }
+                    }
                 }
-                intent.setPackage(it.context.packageName)
-                it.context.sendBroadcast(intent)
             }
         }
     }

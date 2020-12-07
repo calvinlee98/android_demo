@@ -1,6 +1,5 @@
 package com.example.android_demo_application.fragment_adapters
 
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.animators.AnimatorHelper
-import com.example.android_demo_application.fragment_adapters.FavoriteArticlesAdapter
 import com.example.android_demo_application.utils.HttpUtils
-import com.example.android_demo_application.utities.ShouyeItem
+import com.example.android_demo_application.entities.ShouyeItem
 import java.util.*
 
 class FavoriteArticlesAdapter //构造方法传入 主线程的handler

@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.android_demo_application.fragments.ShouyeBannerFragment
-import com.example.android_demo_application.utities.ShouyeItem
+import com.example.android_demo_application.entities.ShouyeItem
 import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -85,14 +85,16 @@ object HttpUtils {
             val list: MutableList<ShouyeItem> = ArrayList()
             for (i in 0 until jsonArray.length()) {
                 val `object` = jsonArray.getJSONObject(i)
-                list.add(ShouyeItem(
+                list.add(
+                    ShouyeItem(
                         `object`.getString("id"),
                         `object`.getString("author"),
                         `object`.getString("publishTime"),
                         `object`.getString("title"),
                         "",
                         `object`.getString("superChapterName"),
-                        `object`.getString("link")))
+                        `object`.getString("link"))
+                )
             }
             list
         } catch (e: Exception) {
@@ -197,14 +199,16 @@ object HttpUtils {
             val list: MutableList<ShouyeItem> = ArrayList()
             for (i in 0 until jsonArray.length()) {
                 val `object` = jsonArray.getJSONObject(i)
-                list.add(ShouyeItem(
+                list.add(
+                    ShouyeItem(
                         `object`.getString("originId"),
                         `object`.getString("author"),
                         `object`.getString("publishTime"),
                         `object`.getString("title"),
                         "",
                         `object`.getString("chapterName"),
-                        `object`.getString("link")))
+                        `object`.getString("link"))
+                )
             }
             list
         } catch (e: Exception) {

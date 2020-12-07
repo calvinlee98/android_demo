@@ -1,20 +1,13 @@
 package com.example.android_demo_application.activities
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.FavoriteArticlesAdapter
-import com.example.android_demo_application.utils.HttpUtils
-import com.example.android_demo_application.utities.ShouyeItem
-import java.lang.ref.WeakReference
+import com.example.android_demo_application.entities.ShouyeItem
 
 class FavoritesActivity : AppCompatActivity(),FavoritesView {
 

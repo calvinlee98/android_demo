@@ -9,29 +9,27 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.ShouyeAdapter
 import com.example.android_demo_application.utils.HttpUtils
-import com.example.android_demo_application.utities.ShouyeItem
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
+import com.example.android_demo_application.entities.ShouyeItem
 import kotlinx.android.synthetic.main.shouye.view.*
 import kotlinx.android.synthetic.main.title_bar.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 
 class ShouyeFragment : Fragment() {
+    companion object {
+        const val favoriteIntentFilterAction = "com.example.android_demo.favorite"
+    }
     // message type
     private val refreshSuccess = 1
     private val refreshFail = 2
@@ -69,13 +67,13 @@ class ShouyeFragment : Fragment() {
     }
     inner class FavoriteChangeReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val flag = intent.getBooleanExtra("flag", false)
+            val flag = intent.getStringExtra("flag")
             val articleId = intent.getStringExtra("articleId")
             if (articleId != null) {
-                if (flag) {
+                if (flag == "add") {
                     _favoriteSet.add(articleId)
                     Toast.makeText(context, "add favorite success", Toast.LENGTH_SHORT).show()
-                } else {
+                } else if (flag == "remove") {
                     _favoriteSet.remove(articleId)
                     Toast.makeText(context, "remove favorite success", Toast.LENGTH_SHORT).show()
                 }
@@ -193,7 +191,7 @@ class ShouyeFragment : Fragment() {
         }
 
         val intentFilter = IntentFilter()
-        intentFilter.addAction("com.example.android_demo.favorite")
+        intentFilter.addAction(favoriteIntentFilterAction)
         activity?.registerReceiver(favoriteChangeReceiver, intentFilter)
 
         refresh()
@@ -251,7 +249,7 @@ class ShouyeFragment : Fragment() {
         }
     }
 
-    private fun setRecyclerView(itemList: List<ShouyeItem>, bannerList: List<ShouyeBannerFragment>, favoriteSet: Set<String>) {
+    private fun setRecyclerView(itemList: List<ShouyeItem>, bannerList: List<ShouyeBannerFragment>, favoriteSet: MutableSet<String>) {
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
         val adapter = ShouyeAdapter(childFragmentManager, itemList, bannerList, favoriteSet)
