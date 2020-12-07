@@ -40,7 +40,6 @@ object HttpUtils {
     @JvmStatic
     fun login(username: String?, passoword: String?): String {
         val requestBody:RequestBody
-        Log.v("Thread",Thread.currentThread().toString())
         requestBody = FormBody.Builder().add("username", username!!).add("password", passoword!!).build()
         return postGetErrorMsg(LOGIN_URL, requestBody)
     }
@@ -52,12 +51,10 @@ object HttpUtils {
         return postGetErrorMsg(REGISTER_URL, requestBody)
     }
 
-    fun postGetErrorMsg(url: String?, requestBody: RequestBody?): String {
-        val requestBody:RequestBody = FormBody.Builder().build()
-        val request:Request
+    fun postGetErrorMsg(url: String?, requestBody: RequestBody): String {
         val response:Response
         val responseData:String
-        request = Request.Builder().url(url!!).post(requestBody).build()
+        val request:Request = Request.Builder().url(url!!).post(requestBody).build()
         try {
             response = okHttpClient.newCall(request).execute()
             responseData = response.body!!.string()
@@ -80,8 +77,8 @@ object HttpUtils {
         val url = "$ARTICLES_LIST$page/json"
         request = Request.Builder().url(url).build()
         return try {
-            response = okHttpClient.newCall(request!!).execute()
-            responseData = response!!.body!!.string()
+            response = okHttpClient.newCall(request).execute()
+            responseData = response.body!!.string()
             val jsonObject = JSONObject(responseData)
             val jsonObject1 = jsonObject.getJSONObject("data")
             val jsonArray = jsonObject1.getJSONArray("datas")
@@ -111,8 +108,8 @@ object HttpUtils {
         val bannerList: MutableList<ShouyeBannerFragment> = ArrayList()
         return try {
             request = Request.Builder().url(BANNER_URL).build()
-            response = okHttpClient.newCall(request!!).execute()
-            responseData = response!!.body!!.string()
+            response = okHttpClient.newCall(request).execute()
+            responseData = response.body!!.string()
             val jsonArray = JSONObject(responseData).getJSONArray("data")
             for (i in 0 until jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(i)
@@ -134,7 +131,7 @@ object HttpUtils {
     private fun getBitmap(url: String): Bitmap? {
         val request:Request = Request.Builder().url(url).build()
         return try {
-            val response = okHttpClient.newCall(request!!).execute()
+            val response = okHttpClient.newCall(request).execute()
             val bytes = response.body!!.bytes()
             BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         } catch (e: Exception) {
@@ -147,8 +144,8 @@ object HttpUtils {
         val responseData:String
         val request:Request = Request.Builder().url(LOGOUT_URL).build()
         return try {
-            response = okHttpClient.newCall(request!!).execute()
-            responseData = response!!.body!!.string()
+            response = okHttpClient.newCall(request).execute()
+            responseData = response.body!!.string()
             val jsonObject = JSONObject(responseData)
             jsonObject.getString("errorMsg")
         } catch (e: Exception) {
@@ -192,8 +189,8 @@ object HttpUtils {
         val cookieInfo = "loginUserName=" + SharedPreferenceUtils.savedUserName + ";loginUserPassword=" + SharedPreferenceUtils.savedPassword
         request = Request.Builder().url("$FAVORITES_ARTICLES$page/json").header("Cookie", cookieInfo).build()
         return try {
-            response = okHttpClient.newCall(request!!).execute()
-            responseData = response!!.body!!.string()
+            response = okHttpClient.newCall(request).execute()
+            responseData = response.body!!.string()
             val jsonObject = JSONObject(responseData)
             val jsonObject1 = jsonObject.getJSONObject("data")
             val jsonArray = jsonObject1.getJSONArray("datas")
@@ -223,10 +220,10 @@ object HttpUtils {
         val url = "$CANCEL_LIKE$page_id/json"
         val cookieInfo = "loginUserName=" + SharedPreferenceUtils.savedUserName + ";loginUserPassword=" + SharedPreferenceUtils.savedPassword
         requestBody = FormBody.Builder().build()
-        request = Request.Builder().url(url).post(requestBody!!).header("Cookie", cookieInfo).build()
+        request = Request.Builder().url(url).post(requestBody).header("Cookie", cookieInfo).build()
         return try {
-            response = okHttpClient.newCall(request!!).execute()
-            responseData = response!!.body!!.string()
+            response = okHttpClient.newCall(request).execute()
+            responseData = response.body!!.string()
             Log.d("TAG", responseData)
             JSONObject(responseData).getString("errorMsg")
         } catch (e: Exception) {
