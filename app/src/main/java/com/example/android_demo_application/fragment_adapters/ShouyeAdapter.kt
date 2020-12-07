@@ -54,21 +54,37 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
             val adapter = ShouyeBannerAdapter(fragmentManager, fragmentList)
             holder.itemView.bannerViewPager.adapter = adapter
         } else {
+            val currItem = itemList[position-1]
             holder.itemView.apply {
-                authorText.text = itemList[position-1].author
-                publishTimeText.text = itemList[position-1].publishTime
-                titleText.text = itemList[position-1].title
-                contentText.text = itemList[position-1].content
-                typeText.text = itemList[position-1].superChapterName
+                authorText.text = currItem.author
+                publishTimeText.text = currItem.publishTime
+                titleText.text = currItem.title
+                contentText.text = currItem.content
+                typeText.text = currItem.superChapterName
                 setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
-                    intent.putExtra("url", itemList[position-1].link)
+                    val flag = favoriteSet.contains(currItem.articleId)
+                    intent.putExtra("url", currItem.link)
+                    intent.putExtra("flag", flag)
                     context.startActivity(intent)
                 }
             }
             // TODO: favorite list
-            if (favoriteSet.contains(itemList[position-1].articleId)) {
-                Log.d("favorite", "${itemList[position-1].articleId}")
+            if (favoriteSet.contains(currItem.articleId)) {
+                holder.itemView.likeBtn.setImageResource(R.drawable.hard_heart)
+            }
+            holder.itemView.likeBtn.setOnClickListener {
+                val intent = Intent("com.example.android_demo.favorite")
+                intent.putExtra("articleId", currItem.articleId)
+                if (favoriteSet.contains(currItem.articleId)) {
+                    holder.itemView.likeBtn.setImageResource(R.drawable.empty_heart)
+                    intent.putExtra("flag", false)
+                } else {
+                    holder.itemView.likeBtn.setImageResource(R.drawable.hard_heart)
+                    intent.putExtra("flag", true)
+                }
+                intent.setPackage(it.context.packageName)
+                it.context.sendBroadcast(intent)
             }
         }
     }

@@ -66,7 +66,7 @@
         android:id="@+id/likeBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/hard_heart"
+        android:background="@drawable/empty_heart"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_below="@id/publishTimeText"/>

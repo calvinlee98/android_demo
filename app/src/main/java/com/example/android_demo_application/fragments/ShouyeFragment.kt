@@ -1,6 +1,10 @@
 package com.example.android_demo_application.fragments
 
 import android.app.ProgressDialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -53,6 +57,26 @@ class ShouyeFragment : Fragment() {
     // inner object for message
     inner class MessageObj(val id: Int, val obj: Any?)
     inner class RefreshObj(val itemList: List<ShouyeItem>, val bannerList: List<ShouyeBannerFragment>, val favoriteSet: Set<String>)
+
+    // broadcast
+    private val favoriteChangeReceiver: FavoriteChangeReceiver by lazy {
+        FavoriteChangeReceiver()
+    }
+    inner class FavoriteChangeReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val flag = intent.getBooleanExtra("flag", false)
+            val articleId = intent.getStringExtra("articleId")
+            if (articleId != null) {
+                if (flag) {
+                    _favoriteSet.add(articleId)
+                    Toast.makeText(context, "add favorite success", Toast.LENGTH_SHORT).show()
+                } else {
+                    _favoriteSet.remove(articleId)
+                    Toast.makeText(context, "remove favorite success", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
@@ -133,24 +157,26 @@ class ShouyeFragment : Fragment() {
         return fragmentView
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        activity?.unregisterReceiver(favoriteChangeReceiver)
+    }
+
     private fun init() {
 
         val swipeRefreshLayout = fragmentView.swiperefreshlayout
         swipeRefreshLayout.setOnRefreshListener {
             //更新逻辑
-
+            refresh()
             swipeRefreshLayout.isRefreshing = false
-
         }
 
         fragmentView.titleBar.refreshBtn.setOnClickListener {
             refresh()
         }
-
         fragmentView.titleBar.moreBtn.setOnClickListener {
             more()
         }
-
         fragmentView.titleBar.backBtn.setOnClickListener {
             Toast.makeText(activity, "Back", Toast.LENGTH_SHORT).show()
         }
@@ -160,6 +186,11 @@ class ShouyeFragment : Fragment() {
             setMessage("loading...")
             setCancelable(false)
         }
+
+        val intentFilter = IntentFilter()
+        intentFilter.addAction("com.example.android_demo.favorite")
+        activity?.registerReceiver(favoriteChangeReceiver, intentFilter)
+
         refresh()
     }
 
