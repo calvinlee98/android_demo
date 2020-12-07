@@ -137,14 +137,7 @@ class ShouyeFragment : Fragment() {
         val swipeRefreshLayout = fragmentView.findViewById<SwipeRefreshLayout>(R.id.swiperefreshlayout)
         swipeRefreshLayout.setOnRefreshListener {
             //更新逻辑
-            MyApplication.pools.execute(Runnable {
-                var list = HttpUtils.getLists(nextPage++);
-                val message = Message.obtain()
-                message.target = newHandler
-                message.obj  = list
-                handler.sendMessage(message)
 
-            })
             swipeRefreshLayout.isRefreshing = false
 
         }
@@ -168,13 +161,7 @@ class ShouyeFragment : Fragment() {
         }
         refresh()
     }
-    val newHandler = object :Handler(){
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            val list = msg.obj
 
-        }
-    }
     private fun refresh() {
         progressDialog.show()
         val id = refreshId

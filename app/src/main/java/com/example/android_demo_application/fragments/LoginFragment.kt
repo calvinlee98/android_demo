@@ -18,17 +18,17 @@ import java.lang.ref.WeakReference
 
 class LoginFragment : Fragment() {
     private class MyHandler(fragment: LoginFragment?) : Handler() {
-        var weakReference: WeakReference<LoginFragment?>
+        var weakReference: WeakReference<LoginFragment?> = WeakReference(fragment)
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             if (weakReference.get() != null) {
                 val s = msg.obj as String
                 if (s == "") {
                     //保存 登录逻辑
-                    SharedPreferenceUtils.saveUserInfo(weakReference.get()!!.yonghuming!!.text.toString(), weakReference.get()!!.mima!!.text.toString())
+                    SharedPreferenceUtils.saveUserInfo(weakReference.get()?.yonghuming!!.text.toString(), weakReference.get()!!.mima!!.text.toString())
                     MyApplication.setIsLoggedIn(true)
-                    MyApplication.userName = weakReference.get()!!.yonghuming!!.text.toString()
-                    weakReference.get()!!.activity!!.finish()
+                    MyApplication.userName = weakReference.get()?.yonghuming!!.text.toString()
+                    weakReference.get()?.activity!!.finish()
                     return
                 }
                 MyApplication.setIsLoggedIn(false)
@@ -38,9 +38,6 @@ class LoginFragment : Fragment() {
             }
         }
 
-        init {
-            weakReference = WeakReference(fragment)
-        }
     }
 
     var yonghuming: TextInputEditText? = null
@@ -52,16 +49,15 @@ class LoginFragment : Fragment() {
         mima = view.findViewById(R.id.text_input_password)
         button = view.findViewById(R.id.denglu)
         val handler: Handler = MyHandler(this)
-        button!!.setOnClickListener(View.OnClickListener { v: View? ->
+        button!!.setOnClickListener {
             MyApplication.pools.execute {
-                val string = login(yonghuming?.getText().toString(), mima?.getText().toString())
+                val string = login(yonghuming?.text.toString(), mima?.text.toString())
                 val message = Message.obtain()
                 message.target = handler
                 message.obj = string
                 handler.sendMessage(message)
             }
         }
-        )
         return view
     }
 }

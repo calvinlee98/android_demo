@@ -26,7 +26,7 @@ class LogActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction().add(R.id.fragment_container, LoginFragment()).commit()
         button = findViewById(R.id.button)
-        button!!.setOnClickListener { v: View? ->
+        button!!.setOnClickListener {
             val fragmentManager1 = supportFragmentManager
             val transaction = fragmentManager1.beginTransaction()
             if (STATE == LOGIN) {

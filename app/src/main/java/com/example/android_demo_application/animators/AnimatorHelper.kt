@@ -28,7 +28,7 @@ object AnimatorHelper {
     fun playFirstAnimator(
         view: View,
         adapter: RecyclerView.Adapter<*>,
-        list: ArrayList<ShouyeItem?>,
+        list: MutableList<ShouyeItem>,
         position: Int
     ) {
         val animator = ValueAnimator.ofFloat(1.0f, 0.0f)

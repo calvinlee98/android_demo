@@ -17,9 +17,9 @@ import com.example.android_demo_application.utities.ShouyeItem
 import java.util.*
 
 class FavoriteArticlesAdapter //构造方法传入 主线程的handler
-(var handler: Handler) : RecyclerView.Adapter<FavoriteArticlesAdapter.ViewHolder>() {
+    : RecyclerView.Adapter<FavoriteArticlesAdapter.ViewHolder>() {
     @JvmField
-    var list: ArrayList<ShouyeItem?> = ArrayList()
+    var list: MutableList<ShouyeItem> = ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.v(TAG, "onCreateViewHolder调用")
         val view = LayoutInflater.from(MyApplication.context).inflate(R.layout.shouye_item_2, parent, false)
@@ -29,11 +29,11 @@ class FavoriteArticlesAdapter //构造方法传入 主线程的handler
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.v(TAG, "onBindViewHolder调用")
         val item = list[position]
-        holder.author.text = item?.author
-        holder.publishTime.text = item?.publishTime
-        holder.title.text = item?.title
-        holder.type.text = item?.superChapterName
-        holder.article_id = item?.articleId
+        holder.author.text = item.author
+        holder.publishTime.text = item.publishTime
+        holder.title.text = item.title
+        holder.type.text = item.superChapterName
+        holder.article_id = item.articleId
         holder.button.setBackgroundResource(R.drawable.hard_heart)
         holder.button.setOnClickListener { v: View? ->
             AnimatorHelper.playFirstAnimator(holder.button, this@FavoriteArticlesAdapter, list, position)
