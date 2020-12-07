@@ -17,49 +17,48 @@ import com.example.android_demo_application.utities.ShouyeItem
 import java.lang.ref.WeakReference
 
 class FavoritesActivity : AppCompatActivity(),FavoritesView {
-    var presenter : FavoritesPresenter? = null
+
+    lateinit var presenter : FavoritesPresenter
     private var curr_page = 0
-    var recyclerView: RecyclerView? = null
-    var adapter: FavoriteArticlesAdapter? = null
-    var swipeRefreshLayout: SwipeRefreshLayout? = null
+    lateinit var recyclerView: RecyclerView
+    lateinit var adapter: FavoriteArticlesAdapter
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var mLastVisibleItemPosition = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.favorites)
         init()
         curr_page = 0
-        presenter?.getFirstUIData(curr_page)
+        presenter.getFirstUIData(curr_page)
     }
 
     private fun init() {
         presenter = FavoritesPresenter()
-        presenter!!.attachView(this)
+        presenter.attachView(this)
         swipeRefreshLayout = findViewById(R.id.swiperefreshlayout)
-        swipeRefreshLayout?.setOnRefreshListener {
+        swipeRefreshLayout.setOnRefreshListener {
             //上滑刷新
             curr_page = 0
-           presenter?.getFirstUIData(curr_page)
+            presenter.getFirstUIData(curr_page)
             //zhu线程上
-            swipeRefreshLayout?.isRefreshing = false
+            swipeRefreshLayout.isRefreshing = false
         }
         recyclerView = findViewById(R.id.rv)
         //加载更多的listener
-        recyclerView?.setOnScrollListener(object : RecyclerView.OnScrollListener() {
+        recyclerView.setOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 val layoutManager = recyclerView.layoutManager
                 if (layoutManager is LinearLayoutManager) {
                     mLastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                 }
-                if (adapter != null) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItemPosition + 1 == adapter!!.itemCount) {
-                       presenter?.getMoreUIData(curr_page)
-                    }
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItemPosition + 1 == adapter.itemCount) {
+                    presenter.getMoreUIData(curr_page)
                 }
             }
         })
         adapter = FavoriteArticlesAdapter()
-        recyclerView?.adapter = adapter
-        recyclerView?.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
 //    internal class MyHandler(activity: FavoritesActivity?) : Handler() {
@@ -91,8 +90,8 @@ class FavoritesActivity : AppCompatActivity(),FavoritesView {
 //    }
 
     override fun initRecyclerView(list: MutableList<ShouyeItem>) {
-        adapter?.list = list
-        adapter?.notifyDataSetChanged()
+        adapter.list = list
+        adapter.notifyDataSetChanged()
         curr_page++
     }
 
@@ -101,8 +100,8 @@ class FavoritesActivity : AppCompatActivity(),FavoritesView {
             return
         }
         for(item in list)
-            adapter?.list?.add(item)
-        adapter?.notifyDataSetChanged()
+            adapter.list.add(item)
+        adapter.notifyDataSetChanged()
         curr_page++
     }
 }
