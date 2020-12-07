@@ -40,7 +40,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
 
         val imageButton = view.likeBtn
         imageButton.setOnClickListener {
-            AnimatorHelper.playFirstAnimator(imageButton)
+           // AnimatorHelper.playFirstAnimator(imageButton)
         }
 
         val holder = ItemViewHolder(view)

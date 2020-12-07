@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.ShouyeAdapter
@@ -132,6 +133,22 @@ class ShouyeFragment : Fragment() {
     }
 
     private fun init() {
+
+        val swipeRefreshLayout = fragmentView.findViewById<SwipeRefreshLayout>(R.id.swiperefreshlayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            //更新逻辑
+            MyApplication.pools.execute(Runnable {
+                var list = HttpUtils.getLists(nextPage++);
+                val message = Message.obtain()
+                message.target = newHandler
+                message.obj  = list
+                handler.sendMessage(message)
+
+            })
+            swipeRefreshLayout.isRefreshing = false
+
+        }
+
         fragmentView.titleBar.refreshBtn.setOnClickListener {
             refresh()
         }
@@ -151,18 +168,28 @@ class ShouyeFragment : Fragment() {
         }
         refresh()
     }
+    val newHandler = object :Handler(){
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            val list = msg.obj
 
+        }
+    }
     private fun refresh() {
         progressDialog.show()
         val id = refreshId
 
         // get first page
+<<<<<<< HEAD
         MyApplication.getPools().execute {
             val bMsg = Message()
             bMsg.what = refreshFail
             bMsg.obj = MessageObj(id, null)
             handler.sendMessageDelayed(bMsg, 5000)
 
+=======
+        MyApplication.pools.execute {
+>>>>>>> 90833d3a938e43a2e9593479bebae2cace9e6d8a
             val pair = HttpUtils.refresh()
             val favoriteSet = HttpUtils.getFavoritesList()
             val msg = Message()
@@ -181,12 +208,16 @@ class ShouyeFragment : Fragment() {
         progressDialog.show()
 
         val id = moreId
+<<<<<<< HEAD
         MyApplication.getPools().execute {
             val bMsg = Message()
             bMsg.what = moreFail
             bMsg.obj = MessageObj(id, null)
             handler.sendMessageDelayed(bMsg, 5000)
 
+=======
+        MyApplication.pools.execute {
+>>>>>>> 90833d3a938e43a2e9593479bebae2cace9e6d8a
             val itemList = HttpUtils.getLists(nextPage)
             val msg = Message()
             if (itemList.isNotEmpty()) {
