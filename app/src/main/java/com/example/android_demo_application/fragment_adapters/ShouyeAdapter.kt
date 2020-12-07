@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.activities.DetailActivity
+import com.example.android_demo_application.animators.AnimatorHelper
+import com.example.android_demo_application.animators.MyButtonAnimatorHelper
 import com.example.android_demo_application.fragments.ShouyeBannerFragment
 import com.example.android_demo_application.entities.ShouyeItem
 import com.example.android_demo_application.utils.HttpUtils
@@ -41,7 +43,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
             when (msg.what) {
                 addFavoriteSuccess -> {
                     val btn = msg.obj as ImageButton
-                    btn.setImageResource(R.drawable.hard_heart)
+                    MyButtonAnimatorHelper.addToFavorite(btn)
                 }
 
                 addFavoriteFail -> {
@@ -51,7 +53,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
 
                 removeFavoriteSuccess -> {
                     val btn = msg.obj as ImageButton
-                    btn.setImageResource(R.drawable.empty_heart)
+                    MyButtonAnimatorHelper.removeFromFavorite(btn)
                 }
 
                 removeFavoriteFail -> {

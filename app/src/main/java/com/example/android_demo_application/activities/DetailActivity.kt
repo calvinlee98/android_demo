@@ -10,6 +10,7 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
+import com.example.android_demo_application.animators.MyButtonAnimatorHelper
 import com.example.android_demo_application.fragments.ShouyeFragment
 import com.example.android_demo_application.utils.HttpUtils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,7 +32,8 @@ class DetailActivity : AppCompatActivity() {
             when (msg.what) {
                 addFavoriteSuccess -> {
                     val btn = msg.obj as FloatingActionButton
-                    btn.setImageResource(R.drawable.hard_heart)
+//                    btn.setImageResource(R.drawable.hard_heart)
+                    MyButtonAnimatorHelper.addToFavorite(btn)
                     sendFavoriteBroadCast("add")
                 }
 
@@ -42,7 +44,7 @@ class DetailActivity : AppCompatActivity() {
 
                 removeFavoriteSuccess -> {
                     val btn = msg.obj as FloatingActionButton
-                    btn.setImageResource(R.drawable.empty_heart)
+                    MyButtonAnimatorHelper.removeFromFavorite(btn)
                     sendFavoriteBroadCast("remove")
                 }
 
