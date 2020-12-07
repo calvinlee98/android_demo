@@ -39,12 +39,6 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
         BannerViewHolder(view)
     } else {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.shouye_item_2, parent, false)
-
-        val imageButton = view.likeBtn
-        imageButton.setOnClickListener {
-           // AnimatorHelper.playFirstAnimator(imageButton)
-        }
-
         ItemViewHolder(view)
     }
 
@@ -66,6 +60,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
                     val flag = favoriteSet.contains(currItem.articleId)
                     intent.putExtra("url", currItem.link)
                     intent.putExtra("flag", flag)
+                    intent.putExtra("articleId", currItem.articleId)
                     context.startActivity(intent)
                 }
             }
@@ -77,10 +72,10 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
                 val intent = Intent("com.example.android_demo.favorite")
                 intent.putExtra("articleId", currItem.articleId)
                 if (favoriteSet.contains(currItem.articleId)) {
-                    holder.itemView.likeBtn.setImageResource(R.drawable.empty_heart)
+                    holder.itemView.likeBtn.setImageResource(R.drawable.empty_heart) // change to animation
                     intent.putExtra("flag", false)
                 } else {
-                    holder.itemView.likeBtn.setImageResource(R.drawable.hard_heart)
+                    holder.itemView.likeBtn.setImageResource(R.drawable.hard_heart) // change to animation
                     intent.putExtra("flag", true)
                 }
                 intent.setPackage(it.context.packageName)

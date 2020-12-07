@@ -74,6 +74,7 @@ class ShouyeFragment : Fragment() {
                     _favoriteSet.remove(articleId)
                     Toast.makeText(context, "remove favorite success", Toast.LENGTH_SHORT).show()
                 }
+                recyclerView.adapter?.notifyDataSetChanged()
             }
         }
     }
