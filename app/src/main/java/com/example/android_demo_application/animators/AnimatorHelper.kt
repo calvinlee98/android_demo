@@ -10,19 +10,26 @@ import com.example.android_demo_application.utities.ShouyeItem
 
 object AnimatorHelper {
     fun playSecondAnimator(view: View) {
-        var animator1 =
-            ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 0.0f).setDuration(500)
-        var animator2 =
-            ObjectAnimator.ofFloat(view, "scaleY", 1.0f, 0.0f).setDuration(500)
-        var animatorSet = AnimatorSet()
-        animatorSet.play(animator1).with(animator2)
-        animatorSet.start()
-        view.setBackgroundResource(R.drawable.hard_heart)
-        animator1 = ObjectAnimator.ofFloat(view, "scaleX", 0.0f, 1.0f).setDuration(500)
-        animator2 = ObjectAnimator.ofFloat(view, "scaleY", 0.0f, 1.0f).setDuration(500)
-        animatorSet = AnimatorSet()
-        animatorSet.play(animator1).with(animator2)
-        animatorSet.start()
+        var animator = ValueAnimator.ofFloat(1.0f,0.0f)
+        animator.duration = 500
+        animator.addUpdateListener {
+            val value:Float = it.animatedValue as Float
+            view.scaleX = value
+            view.scaleY = value
+            if(value == 0.0f)
+                view.setBackgroundResource(R.drawable.hard_heart)
+        }
+        animator.start()
+
+        animator = ValueAnimator.ofFloat(0.0f,1.0f)
+        animator.duration = 500
+        animator.addUpdateListener {
+              val value:Float = it.animatedValue as Float
+              view.scaleX   = value
+               view.scaleY = value
+        }
+        animator.start()
+
     }
 
     fun playFirstAnimator(
