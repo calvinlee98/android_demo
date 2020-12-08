@@ -83,9 +83,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
             val currItem = itemList[position-1]
             holder.itemView.apply {
                 authorText.text = currItem.author
-//                publishTimeText.text = currItem.publishTime
-                // TODO: 时间和文章内的时间不一致
-                publishTimeText.text = SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(currItem.publishTime!!.toLong())
+                publishTimeText.text = currItem.publishTime
                 titleText.text = currItem.title
                 contentText.text = currItem.content
                 typeText.text = currItem.superChapterName
