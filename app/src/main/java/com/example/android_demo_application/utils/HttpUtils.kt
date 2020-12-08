@@ -26,8 +26,9 @@ object HttpUtils {
         val request:Request
         val response:Response
         val responseData:String
+        val cookieInfo = "loginUserName=" + SharedPreferenceUtils.savedUserName + ";loginUserPassword=" + SharedPreferenceUtils.savedPassword
         requestBody = FormBody.Builder().build()
-        request = Request.Builder().post(requestBody).url("$LIKE_ARTICLE$articleId/json").build()
+        request = Request.Builder().post(requestBody).header("Cookie",cookieInfo).url("$LIKE_ARTICLE$articleId/json").build()
         return try {
             response = okHttpClient.newCall(request).execute()
             responseData = response.body!!.string()
