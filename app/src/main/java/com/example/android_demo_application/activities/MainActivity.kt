@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.MainActivityAdapter
+import com.example.android_demo_application.fragments.EmptyFragment
 import com.example.android_demo_application.fragments.ShouyeFragment
 import com.example.android_demo_application.fragments.WodeFragment
 import com.google.android.material.tabs.TabLayout
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     var pager: ViewPager? = null
@@ -28,8 +30,8 @@ class MainActivity : AppCompatActivity() {
         //创建一个fragments list
         val list: MutableList<Fragment> = ArrayList()
         list.add(ShouyeFragment())
-        list.add(ShouyeFragment())
-        list.add(ShouyeFragment())
+        list.add(EmptyFragment())
+        list.add(EmptyFragment())
         list.add(WodeFragment())
 
         //主页  viewpager 的 adapter
