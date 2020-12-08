@@ -1,5 +1,6 @@
-package com.example.android_demo_application.activities
+package com.example.android_demo_application.presenter
 
+import com.example.android_demo_application.activities.FavoritesView
 import com.example.android_demo_application.utils.HttpUtils
 import com.example.android_demo_application.entities.ShouyeItem
 import io.reactivex.Observable
@@ -12,6 +13,9 @@ class FavoritesPresenter {
     var view: FavoritesView? = null
     fun attachView(view: FavoritesView?) {
         this.view = view
+    }
+    fun detachView(){
+        view = null
     }
 
    fun getFirstUIData(cur_page: Int) {

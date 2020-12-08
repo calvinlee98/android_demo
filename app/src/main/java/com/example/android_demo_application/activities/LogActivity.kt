@@ -22,22 +22,22 @@ class LogActivity : AppCompatActivity() {
         init()
     }
 
-    fun init() {
+    private fun init() {
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction().add(R.id.fragment_container, LoginFragment()).commit()
         button = findViewById(R.id.button)
-        button!!.setOnClickListener {
+        button?.setOnClickListener {
             val fragmentManager1 = supportFragmentManager
             val transaction = fragmentManager1.beginTransaction()
             if (STATE == LOGIN) {
                 //转移到 注册页面
                 STATE = REGISTER
                 transaction.replace(R.id.fragment_container, RegisterFragment()).commit()
-                button!!.setText(R.string.qudenglu)
+                button?.setText(R.string.qudenglu)
             } else {
                 STATE = LOGIN
                 transaction.replace(R.id.fragment_container, LoginFragment()).commit()
-                button!!.setText(R.string.quzhuce)
+                button?.setText(R.string.quzhuce)
             }
         }
     }
