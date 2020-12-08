@@ -33,7 +33,8 @@ object HttpUtils {
         return try {
             response = okHttpClient.newCall(request).execute()
             responseData = response.body!!.string()
-            responseData == ""
+            val jsonObject = JSONObject(responseData)
+            jsonObject.getString("errorMsg")==""
         } catch (e: Exception) {
             false
         }

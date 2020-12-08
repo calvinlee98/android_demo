@@ -64,6 +64,9 @@ class DetailActivity : AppCompatActivity() {
         if (flag) {
             likeFloatingBtn.setImageResource(R.drawable.hard_heart)
         }
+        else{
+            likeFloatingBtn.setImageResource(R.drawable.empty_heart)
+        }
 
         likeFloatingBtn.setOnClickListener {
             // 防抖

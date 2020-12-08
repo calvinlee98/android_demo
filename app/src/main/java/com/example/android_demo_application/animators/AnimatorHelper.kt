@@ -8,6 +8,8 @@ import com.example.android_demo_application.R
 import com.example.android_demo_application.entities.ShouyeItem
 
 object AnimatorHelper {
+
+    //喜欢文章的动画
     fun playSecondAnimator(view: View) {
         var animator = ValueAnimator.ofFloat(1.0f,0.0f)
         animator.duration = 500
@@ -31,6 +33,7 @@ object AnimatorHelper {
 
     }
 
+    //取消收藏的动画
     fun playFirstAnimator(
         view: View,
         adapter: RecyclerView.Adapter<*>,
