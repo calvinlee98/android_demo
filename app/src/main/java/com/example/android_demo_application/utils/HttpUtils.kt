@@ -157,7 +157,7 @@ object HttpUtils {
         }
     }
 
-    private val favoritesList: Set<String>
+    val favoritesList: Set<String>
         get() {
             var request:Request
             var response:Response

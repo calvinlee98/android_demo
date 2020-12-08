@@ -119,7 +119,9 @@ import java.lang.ref.WeakReference
                 mFragment.get()?.button_logout!!.visibility = View.GONE
                 mFragment.get()?.button!!.setText(R.string.qudenglu)
                 mFragment.get()?.itemView!!.requestLayout()
-                val intent = Intent("logout")
+
+                val intent = Intent(ShouyeFragment.favoriteIntentFilterAction)
+                intent.putExtra("flag", "logout")
                 intent.setPackage(mFragment.get()?.activity?.packageName)
                 MyApplication.context?.sendBroadcast(intent)
             } else {

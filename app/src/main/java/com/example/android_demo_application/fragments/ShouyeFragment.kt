@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,14 +72,31 @@ class ShouyeFragment : Fragment() {
         override fun onReceive(context: Context, intent: Intent) {
             // 根据消息内容更改favoriteSet，并且刷新recyclerView
             val flag = intent.getStringExtra("flag")
-            val articleId = intent.getStringExtra("articleId")
-            if (articleId != null) {
-                if (flag == "add") {
-                    _favoriteSet.add(articleId)
-                } else if (flag == "remove") {
-                    _favoriteSet.remove(articleId)
+            val articleId: String? = intent.getStringExtra("articleId")
+
+            when (flag) {
+                "add" -> {
+                    if (articleId != null) {
+                        _favoriteSet.add(articleId)
+                        recyclerView.adapter?.notifyDataSetChanged()
+                    }
                 }
-                recyclerView.adapter?.notifyDataSetChanged()
+
+                "remove" -> {
+                    if (articleId != null) {
+                        _favoriteSet.add(articleId)
+                        recyclerView.adapter?.notifyDataSetChanged()
+                    }
+                }
+
+                "login" -> {
+                    refresh()
+                }
+
+                "logout" -> {
+                    _favoriteSet.clear()
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
             }
         }
     }

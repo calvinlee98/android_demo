@@ -49,7 +49,8 @@ class LoginFragment : Fragment(),LoginView {
         MyApplication.userName = yonghuming!!.text.toString()
 
         //发送广播
-        var intent = Intent("login")
+        val intent = Intent(ShouyeFragment.favoriteIntentFilterAction)
+        intent.putExtra("flag", "login")
         intent.setPackage(activity?.packageName)
         activity?.sendBroadcast(intent)
         activity?.finish()
