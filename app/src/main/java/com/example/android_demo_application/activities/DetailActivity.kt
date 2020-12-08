@@ -10,19 +10,24 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
+import com.example.android_demo_application.animators.AnimatorHelper
 import com.example.android_demo_application.animators.MyButtonAnimatorHelper
 import com.example.android_demo_application.fragments.ShouyeFragment
+import com.example.android_demo_application.presenter.DetailPresenter
 import com.example.android_demo_application.utils.HttpUtils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_detail.*
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity(),DetailView{
 
     private val articleId: String by lazy {
         intent.getStringExtra("articleId")
     }
 
     // handler
+    val presenter:DetailPresenter by lazy {
+        DetailPresenter()
+    }
     private val addFavoriteSuccess = 0
     private val addFavoriteFail = 1
     private val removeFavoriteSuccess = 2
@@ -58,8 +63,9 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        presenter.attachView(this)
         setContentView(R.layout.activity_detail)
-
+         //判断当前这篇文章是否被 收藏
         var flag = intent.getBooleanExtra("flag", false)
         if (flag) {
             likeFloatingBtn.setImageResource(R.drawable.hard_heart)
@@ -107,11 +113,24 @@ class DetailActivity : AppCompatActivity() {
         webView.loadUrl(url)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
+    }
+
     private fun sendFavoriteBroadCast(sFlag: String) {
         val intent = Intent(ShouyeFragment.favoriteIntentFilterAction)
         intent.putExtra("flag", sFlag)
         intent.putExtra("articleId", articleId)
         intent.setPackage(packageName)
         sendBroadcast(intent)
+    }
+
+    override fun cancelLikeArticle() {
+        MyButtonAnimatorHelper.removeFromFavorite(likeFloatingBtn)
+    }
+
+    override fun likeArticle() {
+        MyButtonAnimatorHelper.addToFavorite(likeFloatingBtn)
     }
 }

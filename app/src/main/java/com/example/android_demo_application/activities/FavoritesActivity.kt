@@ -8,6 +8,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.android_demo_application.R
 import com.example.android_demo_application.fragment_adapters.FavoriteArticlesAdapter
 import com.example.android_demo_application.entities.ShouyeItem
+import com.example.android_demo_application.presenter.FavoritesPresenter
 
 class FavoritesActivity : AppCompatActivity(),FavoritesView {
 
@@ -68,5 +69,10 @@ class FavoritesActivity : AppCompatActivity(),FavoritesView {
             adapter.list.add(item)
         adapter.notifyDataSetChanged()
         curr_page++
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
     }
 }
