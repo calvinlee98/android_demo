@@ -103,6 +103,8 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
             // 设置收藏图标初始图案
             if (favoriteSet.contains(currItem.articleId)) {
                 holder.itemView.likeBtn.setImageResource(R.drawable.hard_heart)
+            } else {
+                holder.itemView.likeBtn.setImageResource(R.drawable.empty_heart)
             }
 
             holder.itemView.likeBtn.setOnClickListener {
@@ -148,8 +150,11 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
 }
 
 class ShouyeBannerAdapter(fragmentManager: FragmentManager, private val bannerFragmentList: List<Fragment>) : FragmentStatePagerAdapter(fragmentManager) {
-    override fun getItem(position: Int): Fragment {
-        return bannerFragmentList[position]
+    override fun getItem(position: Int) = if (position >= bannerFragmentList.size) {
+        bannerFragmentList[position % bannerFragmentList.size]
+    } else {
+        bannerFragmentList[position]
     }
-    override fun getCount() = bannerFragmentList.size
+
+    override fun getCount() = if (bannerFragmentList.isNotEmpty()) Int.MAX_VALUE else 0
 }

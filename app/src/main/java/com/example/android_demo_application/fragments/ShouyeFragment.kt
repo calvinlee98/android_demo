@@ -75,10 +75,8 @@ class ShouyeFragment : Fragment() {
             if (articleId != null) {
                 if (flag == "add") {
                     _favoriteSet.add(articleId)
-                    Toast.makeText(context, "add favorite success", Toast.LENGTH_SHORT).show()
                 } else if (flag == "remove") {
                     _favoriteSet.remove(articleId)
-                    Toast.makeText(context, "remove favorite success", Toast.LENGTH_SHORT).show()
                 }
                 recyclerView.adapter?.notifyDataSetChanged()
             }
@@ -223,12 +221,12 @@ class ShouyeFragment : Fragment() {
         val id = refreshId
 
         // 定时5s后发送失败消息
-        MyApplication.pools.execute {
-            val bMsg = Message()
-            bMsg.what = refreshFail
-            bMsg.obj = MessageObj(id, null)
-            handler.sendMessageDelayed(bMsg, 5000)
-        }
+//        MyApplication.pools.execute {
+//            val bMsg = Message()
+//            bMsg.what = refreshFail
+//            bMsg.obj = MessageObj(id, null)
+//            handler.sendMessageDelayed(bMsg, 5000)
+//        }
 
         // 从服务器获取itemList, bannerList, favoriteSet
         MyApplication.pools.execute {
