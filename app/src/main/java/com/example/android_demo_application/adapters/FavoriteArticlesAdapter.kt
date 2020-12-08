@@ -1,5 +1,8 @@
 package com.example.android_demo_application.fragment_adapters
 
+import android.app.Activity
+import android.app.Application
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +15,10 @@ import com.example.android_demo_application.R
 import com.example.android_demo_application.animators.AnimatorHelper
 import com.example.android_demo_application.utils.HttpUtils
 import com.example.android_demo_application.entities.ShouyeItem
+import com.example.android_demo_application.fragments.ShouyeFragment
 import java.util.*
 
-class FavoriteArticlesAdapter //构造方法传入 主线程的handler
+class FavoriteArticlesAdapter(private val activity: Activity) //构造方法传入 主线程的handler
     : RecyclerView.Adapter<FavoriteArticlesAdapter.ViewHolder>() {
     @JvmField
     var list: MutableList<ShouyeItem> = ArrayList()
@@ -36,6 +40,12 @@ class FavoriteArticlesAdapter //构造方法传入 主线程的handler
         holder.button.setOnClickListener {
             AnimatorHelper.playFirstAnimator(holder.button, this@FavoriteArticlesAdapter, list, position)
             MyApplication.pools.execute { holder.article_id?.let { HttpUtils.cancelLike(it) } }
+            //发送广播
+            val intent = Intent(ShouyeFragment.favoriteIntentFilterAction)
+            intent.putExtra("flag","remove" )
+            intent.putExtra("articleId", holder.article_id)
+            intent.setPackage(activity.packageName)
+            activity.sendBroadcast(intent)
         }
     }
 

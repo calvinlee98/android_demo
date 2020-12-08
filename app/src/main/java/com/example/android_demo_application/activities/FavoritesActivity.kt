@@ -50,7 +50,7 @@ class FavoritesActivity : AppCompatActivity(),FavoritesView {
                 }
             }
         })
-        adapter = FavoriteArticlesAdapter()
+        adapter = FavoriteArticlesAdapter(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
