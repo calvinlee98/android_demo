@@ -3,6 +3,7 @@ package com.example.android_demo_application.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
@@ -101,10 +102,10 @@ import java.lang.ref.WeakReference
         }
     }
 
-    var handler: Handler = MyHandler()
+    var handler: Handler = MyHandler(this)
 
-    class MyHandler : Handler() {
-        private lateinit var  mFragment: WeakReference<WodeFragment>
+    class MyHandler(mFragment:WodeFragment): Handler(Looper.getMainLooper()) {
+        private val mFragment:WeakReference<WodeFragment> by lazy { WeakReference<WodeFragment>(mFragment) }
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             val s = msg.obj as String
