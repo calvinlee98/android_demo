@@ -156,10 +156,12 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
 
         val runnable = object : Runnable {
             override fun run() {
-                val count = adapter?.count ?: 0
-                if (count != 0) {
-                    setCurrentItem(scrollPosition++ % count, true)
-                    handler.postDelayed(this, interval)
+                if (childCount > 0) {
+                    val count = adapter?.count ?: 0
+                    if (count != 0) {
+                        setCurrentItem(scrollPosition++ % count, true)
+                        handler.postDelayed(this, interval)
+                    }
                 }
             }
         }
