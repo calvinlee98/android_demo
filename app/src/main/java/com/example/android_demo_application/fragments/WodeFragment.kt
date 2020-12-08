@@ -91,16 +91,16 @@ import java.lang.ref.WeakReference
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (MyApplication.isLoggedIn) {
-            button!!.text = MyApplication.userName
-            button_logout!!.visibility = View.VISIBLE
-        } else {
-            button!!.setText(R.string.qudenglu)
-            button_logout!!.visibility = View.GONE
-        }
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        if (MyApplication.isLoggedIn) {
+//            button!!.text = MyApplication.userName
+//            button_logout!!.visibility = View.VISIBLE
+//        } else {
+//            button!!.setText(R.string.qudenglu)
+//            button_logout!!.visibility = View.GONE
+//        }
+//    }
 
     var handler: Handler = MyHandler(this)
 
@@ -119,7 +119,7 @@ import java.lang.ref.WeakReference
                 mFragment.get()?.button_logout!!.visibility = View.GONE
                 mFragment.get()?.button!!.setText(R.string.qudenglu)
                 mFragment.get()?.itemView!!.requestLayout()
-                var intent = Intent("logout")
+                val intent = Intent("logout")
                 intent.setPackage(mFragment.get()?.activity?.packageName)
                 MyApplication.context?.sendBroadcast(intent)
             } else {
