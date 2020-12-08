@@ -22,6 +22,7 @@ class DetailActivity : AppCompatActivity(){
         intent.getStringExtra("articleId")
     }
 
+
     // handler
     private val addFavoriteSuccess = 0
     private val addFavoriteFail = 1

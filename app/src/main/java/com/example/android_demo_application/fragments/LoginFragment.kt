@@ -1,5 +1,6 @@
 package com.example.android_demo_application.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -46,6 +47,11 @@ class LoginFragment : Fragment(),LoginView {
         SharedPreferenceUtils.saveUserInfo(yonghuming!!.text.toString(), mima!!.text.toString())
         MyApplication.setIsLoggedIn(true)
         MyApplication.userName = yonghuming!!.text.toString()
+
+        //发送广播
+        var intent = Intent("login")
+        intent.setPackage(activity?.packageName)
+        activity?.sendBroadcast(intent)
         activity?.finish()
     }
 

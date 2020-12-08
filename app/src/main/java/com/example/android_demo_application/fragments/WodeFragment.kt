@@ -44,7 +44,7 @@ import java.lang.ref.WeakReference
         return itemView
     }
 
-    fun initView() {
+    private fun initView() {
         button = itemView!!.findViewById(R.id.qudenglu)
         button_logout = itemView!!.findViewById(R.id.logout)
         wodejifen = itemView!!.findViewById(R.id.wodejifen)
@@ -119,6 +119,9 @@ import java.lang.ref.WeakReference
                 mFragment.get()?.button_logout!!.visibility = View.GONE
                 mFragment.get()?.button!!.setText(R.string.qudenglu)
                 mFragment.get()?.itemView!!.requestLayout()
+                var intent = Intent("logout")
+                intent.setPackage(mFragment.get()?.activity?.packageName)
+                MyApplication.context?.sendBroadcast(intent)
             } else {
                 Toast.makeText(MyApplication.context, s, Toast.LENGTH_SHORT).show()
             }
