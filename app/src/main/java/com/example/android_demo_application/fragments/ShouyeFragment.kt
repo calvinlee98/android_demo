@@ -84,7 +84,7 @@ class ShouyeFragment : Fragment() {
 
                 "remove" -> {
                     if (articleId != null) {
-                        _favoriteSet.add(articleId)
+                        _favoriteSet.remove(articleId)
                         recyclerView.adapter?.notifyDataSetChanged()
                     }
                 }

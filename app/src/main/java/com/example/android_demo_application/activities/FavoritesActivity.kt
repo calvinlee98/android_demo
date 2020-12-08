@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.android_demo_application.R
-import com.example.android_demo_application.fragment_adapters.FavoriteArticlesAdapter
+import com.example.android_demo_application.adapters.FavoriteArticlesAdapter
 import com.example.android_demo_application.entities.ShouyeItem
 import com.example.android_demo_application.presenter.FavoritesPresenter
 
