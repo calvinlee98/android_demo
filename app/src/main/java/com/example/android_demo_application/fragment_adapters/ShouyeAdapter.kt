@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.activities.DetailActivity
@@ -78,7 +79,10 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is BannerViewHolder) {
             val adapter = ShouyeBannerAdapter(fragmentManager, fragmentList)
-            holder.itemView.bannerViewPager.adapter = adapter
+            holder.itemView.bannerViewPager.also {
+                it.adapter = adapter
+                it.autoScroll(3000)
+            }
         } else {
             val currItem = itemList[position-1]
             holder.itemView.apply {
@@ -145,14 +149,39 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
     }
 
     override fun getItemCount() = itemList.size + 1
+
+    private fun ViewPager.autoScroll(interval: Long) {
+        val handler = Handler()
+        var scrollPosition = 0
+
+        val runnable = object : Runnable {
+            override fun run() {
+                val count = adapter?.count ?: 0
+                if (count != 0) {
+                    setCurrentItem(scrollPosition++ % count, true)
+                    handler.postDelayed(this, interval)
+                }
+            }
+        }
+
+        addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageSelected(position: Int) {
+                scrollPosition = position + 1
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+        })
+
+        handler.post(runnable)
+    }
 }
 
 class ShouyeBannerAdapter(fragmentManager: FragmentManager, private val bannerFragmentList: List<Fragment>) : FragmentStatePagerAdapter(fragmentManager) {
-    override fun getItem(position: Int) = if (position >= bannerFragmentList.size) {
-        bannerFragmentList[position % bannerFragmentList.size]
-    } else {
-        bannerFragmentList[position]
-    }
+    override fun getItem(position: Int) = bannerFragmentList[position]
 
-    override fun getCount() = if (bannerFragmentList.isNotEmpty()) Int.MAX_VALUE else 0
+    override fun getCount() = bannerFragmentList.size
 }
