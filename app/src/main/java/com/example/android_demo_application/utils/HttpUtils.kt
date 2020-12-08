@@ -13,7 +13,7 @@ import java.io.IOException
 import java.util.*
 
 object HttpUtils {
-     val okHttpClient = OkHttpClient()
+     private val okHttpClient = OkHttpClient()
     private const val LOGIN_URL = "https://www.wanandroid.com/user/login"
     private const val  REGISTER_URL = "https://www.wanandroid.com/user/register"
     var ARTICLES_LIST = "https://www.wanandroid.com/article/list/"
@@ -54,7 +54,7 @@ object HttpUtils {
         return postGetErrorMsg(REGISTER_URL, requestBody)
     }
 
-    fun postGetErrorMsg(url: String?, requestBody: RequestBody): String {
+    private fun postGetErrorMsg(url: String?, requestBody: RequestBody): String {
         val response:Response
         val responseData:String
         val request:Request = Request.Builder().url(url!!).post(requestBody).build()
@@ -157,7 +157,7 @@ object HttpUtils {
         }
     }
 
-    val favoritesList: Set<String>
+    private val favoritesList: Set<String>
         get() {
             var request:Request
             var response:Response

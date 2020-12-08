@@ -31,9 +31,9 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
                     private val fragmentList: List<ShouyeBannerFragment>,
                     private val favoriteSet: MutableSet<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
+    inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
+    inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     private val addFavoriteSuccess = 0
     private val addFavoriteFail = 1
