@@ -22,7 +22,7 @@ object HttpUtils {
     var FAVORITES_ARTICLES = "https://www.wanandroid.com/lg/collect/list/" //需要拼接  get方法
     var LIKE_ARTICLE = "https://www.wanandroid.com/lg/collect/" // 需要拼接  post方法
     var CANCEL_LIKE = "https://www.wanandroid.com/lg/uncollect_originId/" //需要拼接  post方法
-    fun likeArticle(articleId: String): String? {
+    fun likeArticle(articleId: String): Boolean {
         val requestBody:RequestBody
         val request:Request
         val response:Response
@@ -33,9 +33,9 @@ object HttpUtils {
         return try {
             response = okHttpClient.newCall(request).execute()
             responseData = response.body!!.string()
-            responseData
+            responseData == ""
         } catch (e: Exception) {
-            "添加喜欢失败！"
+            false
         }
     }
 
@@ -218,7 +218,7 @@ object HttpUtils {
         }
     }
 
-    fun cancelLike(page_id: String): String {
+    fun cancelLike(page_id: String): Boolean {
         val requestBody:RequestBody
         val request:Request
         val response:Response
@@ -231,9 +231,9 @@ object HttpUtils {
             response = okHttpClient.newCall(request).execute()
             responseData = response.body!!.string()
             Log.d("TAG", responseData)
-            JSONObject(responseData).getString("errorMsg")
+            JSONObject(responseData).getString("errorMsg")==""
         } catch (e: Exception) {
-            "取消收藏错误！"
+            false
         }
     }
 }

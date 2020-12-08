@@ -116,7 +116,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
                         // 发送添加/移除收藏请求，并根据接口的返回值交由handler处理后续逻辑
                         MyApplication.pools.execute {
                             val ret = HttpUtils.cancelLike(currItem.articleId)
-                            if (ret == "success") {
+                            if (ret) {
                                 favoriteSet.remove(currItem.articleId) // 在这里处理favoriteSet是因为将articleId用message发送到handler显得有点麻烦
                                 message.what = removeFavoriteSuccess
                             } else {
@@ -128,7 +128,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
                     } else {
                         MyApplication.pools.execute {
                             val ret = HttpUtils.likeArticle(currItem.articleId)
-                            if (ret == "success") {
+                            if (ret) {
                                 favoriteSet.add(currItem.articleId)
                                 message.what = addFavoriteSuccess
                             } else {

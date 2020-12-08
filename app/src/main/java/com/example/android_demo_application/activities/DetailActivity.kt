@@ -74,7 +74,7 @@ class DetailActivity : AppCompatActivity() {
             if (flag) {
                 MyApplication.pools.execute {
                     val ret = HttpUtils.cancelLike(articleId)
-                    if (ret == "success") {
+                    if (ret) {
                         message.what = removeFavoriteSuccess
                         flag = !flag // 请求成功，修改flag状态
                     } else {
@@ -86,7 +86,7 @@ class DetailActivity : AppCompatActivity() {
             } else {
                 MyApplication.pools.execute {
                     val ret = HttpUtils.likeArticle(articleId)
-                    if (ret == "success") {
+                    if (ret) {
                         message.what = addFavoriteSuccess
                         flag = !flag
                     } else {

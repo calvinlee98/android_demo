@@ -33,7 +33,7 @@ class FavoriteArticlesAdapter //构造方法传入 主线程的handler
         holder.type.text = item.superChapterName
         holder.article_id = item.articleId
         holder.button.setBackgroundResource(R.drawable.hard_heart)
-        holder.button.setOnClickListener { v: View? ->
+        holder.button.setOnClickListener {
             AnimatorHelper.playFirstAnimator(holder.button, this@FavoriteArticlesAdapter, list, position)
             MyApplication.pools.execute { holder.article_id?.let { HttpUtils.cancelLike(it) } }
         }
