@@ -3,6 +3,7 @@ package com.example.android_demo_application.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +44,7 @@ import java.lang.ref.WeakReference
         return itemView
     }
 
-    fun initView() {
+    private fun initView() {
         button = itemView!!.findViewById(R.id.qudenglu)
         button_logout = itemView!!.findViewById(R.id.logout)
         wodejifen = itemView!!.findViewById(R.id.wodejifen)
@@ -101,10 +102,10 @@ import java.lang.ref.WeakReference
         }
     }
 
-    var handler: Handler = MyHandler()
+    var handler: Handler = MyHandler(this)
 
-    class MyHandler : Handler() {
-        private lateinit var  mFragment: WeakReference<WodeFragment>
+    class MyHandler(mFragment:WodeFragment): Handler(Looper.getMainLooper()) {
+        private val mFragment:WeakReference<WodeFragment> by lazy { WeakReference<WodeFragment>(mFragment) }
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             val s = msg.obj as String
@@ -118,6 +119,9 @@ import java.lang.ref.WeakReference
                 mFragment.get()?.button_logout!!.visibility = View.GONE
                 mFragment.get()?.button!!.setText(R.string.qudenglu)
                 mFragment.get()?.itemView!!.requestLayout()
+                var intent = Intent("logout")
+                intent.setPackage(mFragment.get()?.activity?.packageName)
+                MyApplication.context?.sendBroadcast(intent)
             } else {
                 Toast.makeText(MyApplication.context, s, Toast.LENGTH_SHORT).show()
             }
