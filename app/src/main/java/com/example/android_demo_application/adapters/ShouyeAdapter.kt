@@ -1,4 +1,4 @@
-package com.example.android_demo_application.fragment_adapters
+package com.example.android_demo_application.adapters
 
 import android.content.Intent
 import android.os.Handler
@@ -24,7 +24,6 @@ import com.example.android_demo_application.entities.ShouyeItem
 import com.example.android_demo_application.utils.HttpUtils
 import kotlinx.android.synthetic.main.shouye_item_1.view.*
 import kotlinx.android.synthetic.main.shouye_item_2.view.*
-import java.text.SimpleDateFormat
 
 class ShouyeAdapter(private val fragmentManager: FragmentManager,
                     private val itemList: List<ShouyeItem>,
@@ -70,6 +69,13 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = if (viewType == 0) {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.shouye_item_1, parent, false)
+
+        val adapter = ShouyeBannerAdapter(fragmentManager, fragmentList)
+        view.bannerViewPager.also {
+            it.adapter = adapter
+            it.autoScroll(3000)
+        }
+
         BannerViewHolder(view)
     } else {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.shouye_item_2, parent, false)
@@ -77,13 +83,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is BannerViewHolder) {
-            val adapter = ShouyeBannerAdapter(fragmentManager, fragmentList)
-            holder.itemView.bannerViewPager.also {
-                it.adapter = adapter
-                it.autoScroll(3000)
-            }
-        } else {
+        if (holder is ItemViewHolder) {
             val currItem = itemList[position-1]
             holder.itemView.apply {
                 authorText.text = currItem.author
@@ -156,13 +156,11 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
 
         val runnable = object : Runnable {
             override fun run() {
-                if (childCount > 0) {
-                    val count = adapter?.count ?: 0
-                    if (count != 0) {
-                        setCurrentItem(scrollPosition++ % count, true)
-                        handler.postDelayed(this, interval)
-                    }
+                val count = adapter?.count ?: 0
+                if (count != 0) {
+                    setCurrentItem(scrollPosition++ % count, true)
                 }
+                handler.postDelayed(this, interval)
             }
         }
 
