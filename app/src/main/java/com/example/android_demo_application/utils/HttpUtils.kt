@@ -13,9 +13,9 @@ import java.io.IOException
 import java.util.*
 
 object HttpUtils {
-    private val okHttpClient = OkHttpClient()
-    var LOGIN_URL = "https://www.wanandroid.com/user/login"
-    var REGISTER_URL = "https://www.wanandroid.com/user/register"
+     val okHttpClient = OkHttpClient()
+    private const val LOGIN_URL = "https://www.wanandroid.com/user/login"
+    private const val  REGISTER_URL = "https://www.wanandroid.com/user/register"
     var ARTICLES_LIST = "https://www.wanandroid.com/article/list/"
     var LOGOUT_URL = "https://www.wanandroid.com/user/logout/json"
     var BANNER_URL = "https://www.wanandroid.com/banner/json"
