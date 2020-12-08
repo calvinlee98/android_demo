@@ -91,16 +91,18 @@ import java.lang.ref.WeakReference
         }
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        if (MyApplication.isLoggedIn) {
-//            button!!.text = MyApplication.userName
-//            button_logout!!.visibility = View.VISIBLE
-//        } else {
-//            button!!.setText(R.string.qudenglu)
-//            button_logout!!.visibility = View.GONE
-//        }
-//    }
+    override fun onResume() {
+        super.onResume()
+
+            if (MyApplication.isLoggedIn) {
+                button!!.text = MyApplication.userName
+                button_logout!!.visibility = View.VISIBLE
+            } else {
+                button!!.setText(R.string.qudenglu)
+                button_logout!!.visibility = View.GONE
+            }
+
+    }
 
     var handler: Handler = MyHandler(this)
 
