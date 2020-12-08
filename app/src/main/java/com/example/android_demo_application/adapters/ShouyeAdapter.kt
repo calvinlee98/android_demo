@@ -136,7 +136,6 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
                                 favoriteSet.add(currItem.articleId)
                                 message.what = addFavoriteSuccess
                             } else {
-                                Log.d("favorite", "fail")
                                 message.what = addFavoriteFail
                             }
                             handler.sendMessage(message)
