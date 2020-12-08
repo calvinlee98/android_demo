@@ -1,4 +1,4 @@
-package com.example.android_demo_application.fragment_adapters
+package com.example.android_demo_application.adapters
 
 import android.content.Intent
 import android.os.Handler
@@ -24,7 +24,6 @@ import com.example.android_demo_application.entities.ShouyeItem
 import com.example.android_demo_application.utils.HttpUtils
 import kotlinx.android.synthetic.main.shouye_item_1.view.*
 import kotlinx.android.synthetic.main.shouye_item_2.view.*
-import java.text.SimpleDateFormat
 
 class ShouyeAdapter(private val fragmentManager: FragmentManager,
                     private val itemList: List<ShouyeItem>,

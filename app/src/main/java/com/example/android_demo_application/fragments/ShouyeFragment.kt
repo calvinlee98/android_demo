@@ -14,12 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
-import com.example.android_demo_application.fragment_adapters.ShouyeAdapter
+import com.example.android_demo_application.adapters.ShouyeAdapter
 import com.example.android_demo_application.utils.HttpUtils
 import com.example.android_demo_application.entities.ShouyeItem
 import kotlinx.android.synthetic.main.shouye.view.*
