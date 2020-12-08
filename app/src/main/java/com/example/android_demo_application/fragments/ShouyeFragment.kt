@@ -73,32 +73,31 @@ class ShouyeFragment : Fragment() {
             // 根据消息内容更改favoriteSet，并且刷新recyclerView
             val flag = intent.getStringExtra("flag")
             val articleId: String? = intent.getStringExtra("articleId")
-//            if (articleId != null) {
-//                if (flag == "add") {
-//                    _favoriteSet.add(articleId)
-//                } else if (flag == "remove") {
-//                    _favoriteSet.remove(articleId)
-//                }
-//                recyclerView.adapter?.notifyDataSetChanged()
-//            } else {
-//                if (flag == "login") {
-//                    _favoriteSet.addAll(HttpUtils.favoritesList)
-//                    recyclerView.adapter?.notifyDataSetChanged()
-//                } else if (flag == "logout") {
-//                    _favoriteSet.clear()
-//                    recyclerView.adapter?.notifyDataSetChanged()
-//                }
-//            }
-            if (flag == "add") {
-                if (articleId != null) _favoriteSet.add(articleId)
-            } else if (flag == "remove") {
-                if (articleId != null) _favoriteSet.add(articleId)
-            } else if (flag == "login") {
-                _favoriteSet.addAll(HttpUtils.favoritesList)
-            } else if (flag == "logout") {
-                _favoriteSet.clear()
+
+            when (flag) {
+                "add" -> {
+                    if (articleId != null) {
+                        _favoriteSet.add(articleId)
+                        recyclerView.adapter?.notifyDataSetChanged()
+                    }
+                }
+
+                "remove" -> {
+                    if (articleId != null) {
+                        _favoriteSet.add(articleId)
+                        recyclerView.adapter?.notifyDataSetChanged()
+                    }
+                }
+
+                "login" -> {
+                    refresh()
+                }
+
+                "logout" -> {
+                    _favoriteSet.clear()
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
             }
-            recyclerView.adapter?.notifyDataSetChanged()
         }
     }
 
