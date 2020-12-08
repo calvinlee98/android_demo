@@ -2,7 +2,6 @@ package com.example.android_demo_application.animators
 
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
-import android.renderscript.Sampler
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
