@@ -10,10 +10,8 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
-import com.example.android_demo_application.animators.AnimatorHelper
 import com.example.android_demo_application.animators.MyButtonAnimatorHelper
 import com.example.android_demo_application.fragments.ShouyeFragment
-import com.example.android_demo_application.presenter.DetailPresenter
 import com.example.android_demo_application.utils.HttpUtils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_detail.*
