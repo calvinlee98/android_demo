@@ -12,7 +12,9 @@ import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_demo_application.MyApplication
@@ -230,11 +232,11 @@ class ShouyeFragment : Fragment() {
 
         // 从服务器获取itemList, bannerList, favoriteSet
         MyApplication.pools.execute {
-            val pair = HttpUtils.refresh()
-            val favoriteSet = HttpUtils.favoritesList
+            val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val triple = HttpUtils.refresh(windowManager.defaultDisplay.width, 200)
             val msg = Message()
-            if (pair != null) {
-                msg.obj = MessageObj(id, RefreshObj(pair.first, pair.second, favoriteSet))
+            if (triple != null) {
+                msg.obj = MessageObj(id, RefreshObj(triple.first, triple.second, triple.third))
                 msg.what = refreshSuccess
             } else {
                 msg.obj = MessageObj(id, null)

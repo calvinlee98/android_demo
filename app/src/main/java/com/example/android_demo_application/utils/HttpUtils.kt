@@ -3,6 +3,7 @@ package com.example.android_demo_application.utils
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import android.view.WindowManager
 import com.example.android_demo_application.fragments.ShouyeBannerFragment
 import com.example.android_demo_application.entities.ShouyeItem
 import okhttp3.*
@@ -103,11 +104,12 @@ object HttpUtils {
         }
     }
 
-    fun refresh(): Pair<List<ShouyeItem>, List<ShouyeBannerFragment>>? {
+    fun refresh(reqWidth: Int, reqHeight: Int): Triple<List<ShouyeItem>, List<ShouyeBannerFragment>, Set<String>>? {
         val request:Request
         val response:Response
         val responseData:String
         val itemList = getLists(0)
+        Log.d("refresh", itemList.toString())
         val bannerList: MutableList<ShouyeBannerFragment> = ArrayList()
         return try {
             request = Request.Builder().url(BANNER_URL).build()
@@ -117,26 +119,25 @@ object HttpUtils {
             for (i in 0 until jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(i)
                 val url = jsonObject.getString("imagePath")
-                Log.d("HttpUtils", url)
                 if (url != "") {
-                    val bitmap = getBitmap(url)
+                    val bitmap = getBitmap(url, reqWidth, reqHeight)
                     if (bitmap != null) {
                         bannerList.add(ShouyeBannerFragment(bitmap))
                     }
                 }
             }
-            Pair<List<ShouyeItem>, List<ShouyeBannerFragment>>(itemList, bannerList)
+            Triple(itemList, bannerList, favoritesList)
         } catch (e: Exception) {
             null
         }
     }
 
-    private fun getBitmap(url: String): Bitmap? {
+    private fun getBitmap(url: String, reqWidth: Int, reqHeight: Int): Bitmap? {
         val request:Request = Request.Builder().url(url).build()
         return try {
             val response = okHttpClient.newCall(request).execute()
             val bytes = response.body!!.bytes()
-            BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            ImageLoader.decodeSampledBitmapFromByteArray(bytes, reqWidth, reqHeight)
         } catch (e: Exception) {
             null
         }
