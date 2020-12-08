@@ -16,6 +16,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android_demo_application.MyApplication
 import com.example.android_demo_application.R
 import com.example.android_demo_application.adapters.ShouyeAdapter
@@ -31,6 +32,7 @@ class ShouyeFragment : Fragment() {
     companion object {
         const val favoriteIntentFilterAction = "com.example.android_demo.favorite"
     }
+    private var mLastVisibleItemPosition = 0
     // message type
     private val refreshSuccess = 1
     private val refreshFail = 2
@@ -39,7 +41,6 @@ class ShouyeFragment : Fragment() {
 
     // the page number for more button
     private var nextPage = 1
-
     // id
     @Volatile private var refreshId = 0
     @Volatile private var moreId = 0
@@ -276,6 +277,17 @@ class ShouyeFragment : Fragment() {
         recyclerView.layoutManager = layoutManager
         val adapter = ShouyeAdapter(childFragmentManager, itemList, bannerList, favoriteSet)
         recyclerView.adapter = adapter
+        recyclerView.setOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                val layoutManager = recyclerView.layoutManager
+                if (layoutManager is LinearLayoutManager) {
+                    mLastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                }
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItemPosition + 1 == recyclerView.adapter?.itemCount) {
+                    more()
+                }
+            }
+        })
     }
 
     private fun notifyRecyclerView(position: Int) {
