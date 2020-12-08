@@ -1,6 +1,8 @@
 package com.example.android_demo_application.animators
 
+import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.renderscript.Sampler
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
@@ -9,53 +11,65 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 object MyButtonAnimatorHelper {
     fun addToFavorite(view: View) {
-        Log.d("animation", "begin")
-        ValueAnimator.ofFloat(2.0f, 0.0f).apply {
-            var flag = true
-            duration = 1000
+        val animatorSet = AnimatorSet()
+
+        val animator1 = ValueAnimator.ofFloat(1.0f, 0.0f).apply {
+            duration = 500
             addUpdateListener {
                 val value = animatedValue as Float
-                if (value > 1.0f) {
-                    view.scaleX = value - 1.0f
-                    view.scaleY = value - 1.0f
-                } else {
-                    if (flag) {
-                        flag = false
-                        if (view is FloatingActionButton) {
-                            view.setImageResource(R.drawable.hard_heart)
-                        } else if (view is ImageButton) {
-                            view.setImageResource(R.drawable.hard_heart)
-                        }
+                view.scaleX = value
+                view.scaleY = value
+                if (value == 0.0f) {
+                    if (view is FloatingActionButton) {
+                        view.setImageResource(R.drawable.hard_heart)
+                    } else if (view is ImageButton) {
+                        view.setImageResource(R.drawable.hard_heart)
                     }
-                    view.scaleX = 1.0f - value
-                    view.scaleY = 1.0f - value
                 }
             }
-            start()
         }
+
+        val animator2 = ValueAnimator.ofFloat(0.0f, 1.0f).apply {
+            duration = 500
+            addUpdateListener {
+                val value = animatedValue as Float
+                view.scaleX = value
+                view.scaleY = value
+            }
+        }
+
+        animatorSet.playSequentially(animator1, animator2)
+        animatorSet.start()
+
     }
 
     fun removeFromFavorite(view: View) {
-        ValueAnimator.ofFloat(2.0f, 0.0f).apply {
-            var flag = true
-            duration = 1000
+        val animatorSet = AnimatorSet()
+
+        val animator1 = ValueAnimator.ofFloat(1.0f, 0.0f).apply {
+            duration = 500
             addUpdateListener {
                 val value = animatedValue as Float
-                if (value > 1.0f) {
-                    view.alpha = value - 1.0f
-                } else {
-                    if (flag) {
-                        flag = false
-                        if (view is FloatingActionButton) {
-                            view.setImageResource(R.drawable.empty_heart)
-                        } else if (view is ImageButton) {
-                            view.setImageResource(R.drawable.empty_heart)
-                        }
+                view.alpha = value
+                if (value == 0.0f) {
+                    if (view is FloatingActionButton) {
+                        view.setImageResource(R.drawable.empty_heart)
+                    } else if (view is ImageButton) {
+                        view.setImageResource(R.drawable.empty_heart)
                     }
-                    view.alpha = 1.0f - value
                 }
             }
-            start()
         }
+
+        val animator2 = ValueAnimator.ofFloat(0.0f, 1.0f).apply {
+            duration = 500
+            addUpdateListener {
+                val value = animatedValue as Float
+                view.alpha = value
+            }
+        }
+
+        animatorSet.playSequentially(animator1, animator2)
+        animatorSet.start()
     }
 }
