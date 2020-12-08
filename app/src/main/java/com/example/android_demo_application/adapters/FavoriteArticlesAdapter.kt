@@ -43,7 +43,6 @@ class FavoriteArticlesAdapter(private val activity: Activity) //构造方法传�
             val intent = Intent(ShouyeFragment.favoriteIntentFilterAction)
             intent.putExtra("flag","remove" )
             intent.putExtra("articleId", holder.article_id)
-            Log.d("ff", holder.article_id ?: "")
             intent.setPackage(activity.packageName)
             activity.sendBroadcast(intent)
         }
