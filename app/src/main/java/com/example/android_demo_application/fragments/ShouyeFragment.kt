@@ -221,12 +221,12 @@ class ShouyeFragment : Fragment() {
         val id = refreshId
 
         // 定时5s后发送失败消息
-//        MyApplication.pools.execute {
-//            val bMsg = Message()
-//            bMsg.what = refreshFail
-//            bMsg.obj = MessageObj(id, null)
-//            handler.sendMessageDelayed(bMsg, 5000)
-//        }
+        MyApplication.pools.execute {
+            val bMsg = Message()
+            bMsg.what = refreshFail
+            bMsg.obj = MessageObj(id, null)
+            handler.sendMessageDelayed(bMsg, 10000)
+        }
 
         // 从服务器获取itemList, bannerList, favoriteSet
         MyApplication.pools.execute {
