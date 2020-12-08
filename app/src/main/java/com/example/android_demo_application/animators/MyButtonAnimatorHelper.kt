@@ -23,8 +23,8 @@ object MyButtonAnimatorHelper {
                         flag = false
                         if (view is FloatingActionButton) {
                             view.setImageResource(R.drawable.hard_heart)
-                        } else {
-                            view.setBackgroundResource(R.drawable.hard_heart)
+                        } else if (view is ImageButton) {
+                            view.setImageResource(R.drawable.hard_heart)
                         }
                     }
                     view.scaleX = 1.0f - value
@@ -48,8 +48,8 @@ object MyButtonAnimatorHelper {
                         flag = false
                         if (view is FloatingActionButton) {
                             view.setImageResource(R.drawable.empty_heart)
-                        } else {
-                            view.setBackgroundResource(R.drawable.empty_heart)
+                        } else if (view is ImageButton) {
+                            view.setImageResource(R.drawable.empty_heart)
                         }
                     }
                     view.alpha = 1.0f - value

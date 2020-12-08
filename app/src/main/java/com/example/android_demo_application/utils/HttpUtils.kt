@@ -109,7 +109,6 @@ object HttpUtils {
         val response:Response
         val responseData:String
         val itemList = getLists(0)
-        Log.d("refresh", itemList.toString())
         val bannerList: MutableList<ShouyeBannerFragment> = ArrayList()
         return try {
             request = Request.Builder().url(BANNER_URL).build()
