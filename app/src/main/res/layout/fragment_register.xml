@@ -16,7 +16,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/qingshurumima"
+            android:hint="@string/qingshuruyonghuming"
             android:layout_weight="1">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/text_input_username"

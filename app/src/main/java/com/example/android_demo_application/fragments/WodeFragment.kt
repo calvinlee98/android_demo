@@ -30,14 +30,14 @@ import java.lang.ref.WeakReference
     var button: Button? = null
 
     //MyButton extends FrameLayout  是一个FrameLayout
-    var wodejifen: MyButton? = null
-    var wodefenxiang: MyButton? = null
-    var wodeshoucang: MyButton? = null
-    var shaohouyuedu: MyButton? = null
-    var yuedulishi: MyButton? = null
-    var kaiyuanxiangmu: MyButton? = null
-    var guanyuzuozhe: MyButton? = null
-    var xitongshezhi: MyButton? = null
+    private var wodejifen: MyButton? = null
+    private var wodefenxiang: MyButton? = null
+    private var wodeshoucang: MyButton? = null
+    private var shaohouyuedu: MyButton? = null
+    private var yuedulishi: MyButton? = null
+    private var kaiyuanxiangmu: MyButton? = null
+    private var guanyuzuozhe: MyButton? = null
+    private var xitongshezhi: MyButton? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         itemView = inflater.inflate(R.layout.wode, container, false)
         initView()
