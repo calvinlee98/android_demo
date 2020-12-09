@@ -18,6 +18,7 @@ import com.example.android_demo_application.activities.LogActivity
 import com.example.android_demo_application.utils.HttpUtils
 import com.example.android_demo_application.utils.SharedPreferenceUtils
 import com.example.android_demo_application.views.MyButton
+import kotlinx.android.synthetic.main.wode.*
 import java.lang.ref.WeakReference
 
 /*
@@ -25,19 +26,23 @@ import java.lang.ref.WeakReference
 * 我的 界面的fragment
 *
 * */   class WodeFragment : Fragment(), View.OnClickListener {
-    var button_logout: Button? = null
-    var itemView: View? = null
-    var button: Button? = null
+
+    private lateinit var itemView: View
+    private lateinit var myPoints:MyButton
+    private lateinit var mySharings:MyButton
+    private lateinit var myFavorites:MyButton
+    private lateinit var readLater:MyButton
+    private lateinit var readHistory:MyButton
+    private lateinit var openSourceProject:MyButton
+    private lateinit var aboutComposer:MyButton
+    private lateinit var settings:MyButton
+    private lateinit var goLogin:Button
+    private lateinit var logout:Button
+
+
 
     //MyButton extends FrameLayout  是一个FrameLayout
-    private var wodejifen: MyButton? = null
-    private var wodefenxiang: MyButton? = null
-    private var wodeshoucang: MyButton? = null
-    private var shaohouyuedu: MyButton? = null
-    private var yuedulishi: MyButton? = null
-    private var kaiyuanxiangmu: MyButton? = null
-    private var guanyuzuozhe: MyButton? = null
-    private var xitongshezhi: MyButton? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         itemView = inflater.inflate(R.layout.wode, container, false)
         initView()
@@ -45,61 +50,54 @@ import java.lang.ref.WeakReference
     }
 
     private fun initView() {
-        button = itemView!!.findViewById(R.id.qudenglu)
-        button_logout = itemView!!.findViewById(R.id.logout)
-        wodejifen = itemView!!.findViewById(R.id.wodejifen)
-        wodefenxiang = itemView!!.findViewById(R.id.wodefenxiang)
-        wodeshoucang = itemView!!.findViewById(R.id.wodeshoucang)
-        shaohouyuedu = itemView!!.findViewById(R.id.shaohouyuedu)
-        yuedulishi = itemView!!.findViewById(R.id.yuedulishi)
-        kaiyuanxiangmu = itemView!!.findViewById(R.id.kaiyuanxiangmu)
-        guanyuzuozhe = itemView!!.findViewById(R.id.guanyuzuozhe)
-        xitongshezhi = itemView!!.findViewById(R.id.xitongshezhi)
+         myPoints = itemView.findViewById(R.id.myPoints)
+         mySharings = itemView.findViewById(R.id.mySharings)
+         myFavorites = itemView.findViewById(R.id.myFavorites)
+         readLater = itemView.findViewById(R.id.readLater)
+         readHistory  = itemView.findViewById(R.id.readHistory)
+        openSourceProject = itemView.findViewById(R.id.openSourceProject)
+        aboutComposer = itemView.findViewById(R.id.aboutComposer)
+        settings = itemView.findViewById(R.id.settings)
+        goLogin = itemView.findViewById(R.id.goLogin)
+        logout = itemView.findViewById(R.id.logout)
 
 
-        //设置每个复合button的图片 文字资源
-        wodejifen?.set(R.drawable.wodejifen, R.string.wodejifen)
-        wodefenxiang?.set(R.drawable.wodefenxiang, R.string.wodefenxiang)
-        wodeshoucang?.set(R.drawable.wodeshoucang, R.string.wodeshoucang)
-        shaohouyuedu?.set(R.drawable.shaohouyuedu, R.string.shaohouyuedu)
-        yuedulishi?.set(R.drawable.yuedulishi, R.string.yuedulishi)
-        kaiyuanxiangmu?.set(R.drawable.kaiyuanxiangmu, R.string.kaiyuanxiangmu)
-        guanyuzuozhe?.set(R.drawable.guanyuzuozhe, R.string.guanyuzuozhe)
-        xitongshezhi?.set(R.drawable.xitongshezhi, R.string.xitongshezhi)
-        button?.setOnClickListener { v: View -> onClick(v) }
-        button_logout?.setOnClickListener { v: View -> onClick(v) }
-        wodejifen?.setOnClickListener { v: View -> onClick(v) }
-        wodefenxiang?.setOnClickListener { v: View -> onClick(v) }
-        wodeshoucang?.setOnClickListener { v: View -> onClick(v) }
-        shaohouyuedu?.setOnClickListener { v: View -> onClick(v) }
-        yuedulishi?.setOnClickListener { v: View -> onClick(v) }
-        kaiyuanxiangmu?.setOnClickListener { v: View -> onClick(v) }
-        guanyuzuozhe?.setOnClickListener { v: View -> onClick(v) }
-        xitongshezhi?.setOnClickListener { v: View -> onClick(v) }
+
+
+
+        goLogin.setOnClickListener { v: View -> onClick(v) }
+        logout.setOnClickListener { v: View -> onClick(v) }
+        myPoints.setOnClickListener { v: View -> onClick(v) }
+        mySharings.setOnClickListener { v: View -> onClick(v) }
+        myFavorites.setOnClickListener { v: View -> onClick(v) }
+        readLater.setOnClickListener { v: View -> onClick(v) }
+        readHistory.setOnClickListener { v: View -> onClick(v) }
+        openSourceProject.setOnClickListener { v: View -> onClick(v) }
+        aboutComposer.setOnClickListener { v: View -> onClick(v) }
+        settings.setOnClickListener { v: View -> onClick(v) }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
             if (MyApplication.isLoggedIn) {
-                button!!.text = MyApplication.userName
-                button_logout!!.visibility = View.VISIBLE
+                goLogin.text = MyApplication.userName
+                logout.visibility = View.VISIBLE
             } else {
-                button!!.setText(R.string.qudenglu)
-                button_logout!!.visibility = View.GONE
+                goLogin.setText(R.string.goLogin)
+                logout.visibility = View.GONE
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-
             if (MyApplication.isLoggedIn) {
-                button!!.text = MyApplication.userName
-                button_logout!!.visibility = View.VISIBLE
+                goLogin.text = MyApplication.userName
+                logout.visibility = View.VISIBLE
             } else {
-                button!!.setText(R.string.qudenglu)
-                button_logout!!.visibility = View.GONE
+                goLogin.setText(R.string.goLogin)
+                logout.visibility = View.GONE
             }
 
     }
@@ -118,9 +116,9 @@ import java.lang.ref.WeakReference
                 MyApplication.userName = ""
                 //清空缓存
                 SharedPreferenceUtils.empty()
-                mFragment.get()?.button_logout!!.visibility = View.GONE
-                mFragment.get()?.button!!.setText(R.string.qudenglu)
-                mFragment.get()?.itemView!!.requestLayout()
+                mFragment.get()?.logout?.visibility = View.GONE
+                mFragment.get()?.goLogin?.setText(R.string.goLogin)
+                mFragment.get()?.itemView?.requestLayout()
 
                 val intent = Intent(ShouyeFragment.favoriteIntentFilterAction)
                 intent.putExtra("flag", "logout")
@@ -135,7 +133,7 @@ import java.lang.ref.WeakReference
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.qudenglu -> {
+            R.id.goLogin -> {
                 val intent = Intent(activity, LogActivity::class.java)
                 startActivity(intent)
             }
@@ -150,9 +148,9 @@ import java.lang.ref.WeakReference
                     message.obj = s
                     handler.sendMessage(message)
                 }
-            R.id.wodejifen -> Toast.makeText(MyApplication.context, "我的积分", Toast.LENGTH_SHORT).show()
-            R.id.wodefenxiang -> Toast.makeText(MyApplication.context, "我的分享", Toast.LENGTH_SHORT).show()
-            R.id.wodeshoucang -> {
+            R.id.myPoints -> Toast.makeText(MyApplication.context, "我的积分", Toast.LENGTH_SHORT).show()
+            R.id.mySharings -> Toast.makeText(MyApplication.context, "我的分享", Toast.LENGTH_SHORT).show()
+            R.id.myFavorites -> {
                 val intent1: Intent
                 if (MyApplication.isLoggedIn) {
                     intent1 = Intent(activity, FavoritesActivity::class.java)
@@ -162,11 +160,11 @@ import java.lang.ref.WeakReference
                     startActivity(intent1)
                 }
             }
-            R.id.shaohouyuedu -> Toast.makeText(MyApplication.context, "稍后阅读", Toast.LENGTH_SHORT).show()
-            R.id.yuedulishi -> Toast.makeText(MyApplication.context, "阅读历史", Toast.LENGTH_SHORT).show()
-            R.id.kaiyuanxiangmu -> Toast.makeText(MyApplication.context, "开源项目", Toast.LENGTH_SHORT).show()
-            R.id.guanyuzuozhe -> Toast.makeText(MyApplication.context, "关于作者", Toast.LENGTH_SHORT).show()
-            R.id.xitongshezhi -> Toast.makeText(MyApplication.context, "系统设置", Toast.LENGTH_SHORT).show()
+            R.id.readLater -> Toast.makeText(MyApplication.context, "稍后阅读", Toast.LENGTH_SHORT).show()
+            R.id.readHistory -> Toast.makeText(MyApplication.context, "阅读历史", Toast.LENGTH_SHORT).show()
+            R.id.openSourceProject -> Toast.makeText(MyApplication.context, "开源项目", Toast.LENGTH_SHORT).show()
+            R.id.aboutComposer -> Toast.makeText(MyApplication.context, "关于作者", Toast.LENGTH_SHORT).show()
+            R.id.settings -> Toast.makeText(MyApplication.context, "系统设置", Toast.LENGTH_SHORT).show()
         }
     }
 

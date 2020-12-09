@@ -33,11 +33,11 @@ class LogActivity : AppCompatActivity() {
                 //转移到 注册页面
                 STATE = REGISTER
                 transaction.replace(R.id.fragment_container, RegisterFragment()).commit()
-                button?.setText(R.string.qudenglu)
+                button?.setText(R.string.goLogin)
             } else {
                 STATE = LOGIN
                 transaction.replace(R.id.fragment_container, LoginFragment()).commit()
-                button?.setText(R.string.quzhuce)
+                button?.setText(R.string.goRegister)
             }
         }
     }

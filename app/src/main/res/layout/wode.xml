@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:open="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -24,11 +25,11 @@
         android:layout_centerInParent="true"
         android:id="@+id/touxiang"/>
       <Button
-          android:id="@+id/qudenglu"
+          android:id="@+id/goLogin"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:background="@android:color/transparent"
-          android:text="@string/qudenglu"
+          android:text="@string/goLogin"
           android:textColor="@color/white"
           android:layout_below="@+id/touxiang"
           android:layout_centerHorizontal="true"/>
@@ -40,36 +41,52 @@
        android:orientation="vertical"
        android:layout_marginTop="2dp">
       <com.example.android_demo_application.views.MyButton
-          android:id="@+id/wodejifen"
+          android:id="@+id/myPoints"
+          open:mImageButtonBackgroundRes="@drawable/mypoints"
+          open:mButtonText="@string/myPoints"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"/>
       <com.example.android_demo_application.views.MyButton
-          android:id="@+id/wodefenxiang"
+          android:id="@+id/mySharings"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
+          android:layout_height="wrap_content"
+          open:mImageButtonBackgroundRes="@drawable/mysharings"
+          open:mButtonText="@string/mySharings"/>
        <com.example.android_demo_application.views.MyButton
-           android:id="@+id/wodeshoucang"
+           open:mImageButtonBackgroundRes="@drawable/myfavorites"
+           open:mButtonText="@string/myFavorites"
+           android:id="@+id/myFavorites"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"/>
        <com.example.android_demo_application.views.MyButton
+           open:mImageButtonBackgroundRes="@drawable/readlater"
+           open:mButtonText="@string/readLater"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:id="@+id/shaohouyuedu"/>
+           android:id="@+id/readLater"/>
        <com.example.android_demo_application.views.MyButton
+           open:mImageButtonBackgroundRes="@drawable/readhistory"
+           open:mButtonText="@string/readHistory"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:id="@+id/yuedulishi"/>
+           android:id="@+id/readHistory"/>
        <com.example.android_demo_application.views.MyButton
+           open:mImageButtonBackgroundRes="@drawable/opensourceproject"
+           open:mButtonText="@string/openSourceProject"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:id="@+id/kaiyuanxiangmu"/>
+           android:id="@+id/openSourceProject"/>
        <com.example.android_demo_application.views.MyButton
+           open:mImageButtonBackgroundRes="@drawable/aboutcomposer"
+           open:mButtonText="@string/aboutComposer"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:id="@+id/guanyuzuozhe"/>
+           android:id="@+id/aboutComposer"/>
        <com.example.android_demo_application.views.MyButton
+           open:mImageButtonBackgroundRes="@drawable/settings"
+           open:mButtonText="@string/settings"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:id="@+id/xitongshezhi"/>
+           android:id="@+id/settings"/>
    </LinearLayout>
 </LinearLayout>

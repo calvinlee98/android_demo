@@ -1,5 +1,6 @@
 package com.example.android_demo_application.views
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -21,10 +22,22 @@ class MyButton : FrameLayout {
     constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs) {
         //MyButton本身是一个 FrameLayout  构造时  构造出一个view（RelativeLayout  add到自己）
         init()
+        val  ta = context.obtainStyledAttributes(attrs,R.styleable.MyButton)
+        val mButtonText = ta.getString(R.styleable.MyButton_mButtonText)
+        val mDrawable = ta.getDrawable(R.styleable.MyButton_mImageButtonBackgroundRes)
+        imageButton1.background = mDrawable
+        button.text = mButtonText
     }
+
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context!!, attrs, defStyleAttr) {
         init()
+        val  ta = context.obtainStyledAttributes(attrs,R.styleable.MyButton)
+        val mButtonText = ta.getString(R.styleable.MyButton_mButtonText)
+        val mDrawable = ta.getDrawable(R.styleable.MyButton_mImageButtonBackgroundRes)
+        imageButton1.background = mDrawable
+        button.text = mButtonText
+
     }
 
     private fun init() {
@@ -34,10 +47,6 @@ class MyButton : FrameLayout {
         imageButton2 = findViewById(R.id.ib2)
     }
 
-    operator fun set(imageSrc: Int, stringSrc: Int) {
-        imageButton1.setBackgroundResource(imageSrc)
-        button.setText(stringSrc)
-    }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         return true
