@@ -238,16 +238,14 @@ class ShouyeFragment : Fragment() {
         // 本次刷新的id
         val id = refreshId
 
-        // 定时5s后发送失败消息
-        MyApplication.pools.execute {
-            val bMsg = Message()
-            bMsg.what = refreshFail
-            bMsg.obj = MessageObj(id, null)
-            handler.sendMessageDelayed(bMsg, 10000)
-        }
-
         // 从服务器获取itemList, bannerList, favoriteSet
         MyApplication.pools.execute {
+            // 延时10s发送失败消息
+            val fMsg = Message()
+            fMsg.what = refreshFail
+            fMsg.obj = MessageObj(id, null)
+            handler.sendMessageDelayed(fMsg, 10000)
+
             val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val triple = HttpUtils.refresh(windowManager.defaultDisplay.width, 200)
             val msg = Message()
@@ -267,16 +265,14 @@ class ShouyeFragment : Fragment() {
         // 本次获取更多的id
         val id = moreId
 
-        // 定时5s发送失败消息
-        MyApplication.pools.execute {
-            val bMsg = Message()
-            bMsg.what = moreFail
-            bMsg.obj = MessageObj(id, null)
-            handler.sendMessageDelayed(bMsg, 5000)
-        }
-
         // 从服务器获取下一页数据
         MyApplication.pools.execute {
+            // 定时5s发送失败消息
+            val fMsg = Message()
+            fMsg.what = moreFail
+            fMsg.obj = MessageObj(id, null)
+            handler.sendMessageDelayed(fMsg, 5000)
+
             val itemList = HttpUtils.getLists(nextPage)
             val msg = Message()
             if (itemList.isNotEmpty()) {
