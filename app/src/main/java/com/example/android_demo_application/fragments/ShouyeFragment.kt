@@ -164,7 +164,7 @@ class ShouyeFragment : Fragment() {
 
                         nextPage += 1
 
-                        val size = _itemList.size + 1
+                        val size = _itemList.size
                         _itemList.addAll(messageObj.obj as List<ShouyeItem>)
                         notifyRecyclerView(size)
                     }
