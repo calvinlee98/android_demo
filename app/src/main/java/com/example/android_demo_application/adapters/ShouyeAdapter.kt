@@ -34,6 +34,12 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
 
     inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
+    inner class ShouyeBannerAdapter(fragmentManager: FragmentManager, private val bannerFragmentList: List<Fragment>) : FragmentStatePagerAdapter(fragmentManager) {
+        override fun getItem(position: Int) = bannerFragmentList[position]
+
+        override fun getCount() = bannerFragmentList.size
+    }
+
     private val addFavoriteSuccess = 0
     private val addFavoriteFail = 1
     private val removeFavoriteSuccess = 2
@@ -149,6 +155,7 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
 
     override fun getItemCount() = itemList.size + 1
 
+    // 自动轮播，到达最后一个banner后返回第一张
     private fun ViewPager.autoScroll(interval: Long) {
         val handler = Handler()
         var scrollPosition = 0
@@ -177,10 +184,4 @@ class ShouyeAdapter(private val fragmentManager: FragmentManager,
 
         handler.post(runnable)
     }
-}
-
-class ShouyeBannerAdapter(fragmentManager: FragmentManager, private val bannerFragmentList: List<Fragment>) : FragmentStatePagerAdapter(fragmentManager) {
-    override fun getItem(position: Int) = bannerFragmentList[position]
-
-    override fun getCount() = bannerFragmentList.size
 }

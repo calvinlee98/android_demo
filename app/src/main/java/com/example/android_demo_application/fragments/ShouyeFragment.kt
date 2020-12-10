@@ -246,8 +246,10 @@ class ShouyeFragment : Fragment() {
             fMsg.obj = MessageObj(id, null)
             handler.sendMessageDelayed(fMsg, 10000)
 
+            // 获取本手机的屏幕宽度（压缩图片）
             val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val triple = HttpUtils.refresh(windowManager.defaultDisplay.width, 200)
+
             val msg = Message()
             if (triple != null) {
                 msg.obj = MessageObj(id, RefreshObj(triple.first, triple.second, triple.third))
